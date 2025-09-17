@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yeshdip Poudel | Portfolio</title>
+<style>
+/* Fonts & Base */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; scroll-behavior: smooth;}
+body { background: linear-gradient(135deg, #0d0d0d, #1a1a1a, #330000); color:white; line-height:1.6; }
+
+/* Navbar */
+nav{ display:flex; justify-content:space-between; align-items:center; padding:1.2rem 3rem; background:rgba(0,0,0,0.7); position:sticky; top:0; z-index:1000; backdrop-filter:blur(10px);}
+nav h1{font-size:1.6rem; color:crimson;}
+nav ul{ list-style:none; display:flex; gap:1.5rem;}
+nav ul li a{ text-decoration:none; color:white; font-weight:500; position:relative; transition:0.3s;}
+nav ul li a::after{ content:""; position:absolute; width:0; height:2px; left:0; bottom:-4px; background:crimson; transition:width 0.3s;}
+nav ul li a:hover::after{ width:100%; }
+
+/* Hero Section */
+.hero{ text-align:center; padding:5rem 2rem; }
+.hero img{ width:180px; height:180px; border-radius:50%; border:4px solid crimson; margin-bottom:20px; object-fit:cover; box-shadow:0 0 25px rgba(255,71,87,0.6); transition:transform 0.3s;}
+.hero img:hover{ transform:scale(1.05); }
+.hero h2{ font-size:3rem; margin-bottom:1rem;}
+.hero p{ font-size:1.3rem; color:#ccc; max-width:600px; margin:auto;}
+
+/* Sections */
+section{ padding:4rem 2rem; max-width:1100px; margin:auto; }
+h2{text-align:center; margin-bottom:2rem; font-size:2rem; color:crimson;}
+
+/* Cards */
+.card-container{ display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:1.5rem; }
+.card{ background: rgba(255,255,255,0.05); border-radius:15px; padding:2rem; text-align:center; transition: transform 0.3s, box-shadow 0.3s; cursor:pointer;}
+.card:hover{ transform: translateY(-8px); box-shadow: 0 8px 20px rgba(220,20,60,0.6); }
+.card img{ width:80px; height:80px; object-fit:cover; margin-bottom:15px; border-radius:10px; }
+
+/* Socials */
+.socials{text-align:center; margin-top:2rem;}
+.socials a{ margin:0 1rem; color:crimson; font-weight:bold; text-decoration:none; transition:0.3s;}
+.socials a:hover{ color:white; }
+
+/* Footer */
+footer{ text-align:center; padding:1.5rem; margin-top:2rem; background:#111; font-size:0.9rem; color:#aaa; }
+
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav>
+<h1>Yeshdip Poudel</h1>
+<ul>
+<li><a href="#about">About</a></li>
+<li><a href="#skills">Skills</a></li>
+<li><a href="#projects">Projects</a></li>
+<li><a href="#achievements">Achievements</a></li>
+<li><a href="#contact">Contact</a></li>
+</ul>
+</nav>
+
+<!-- Hero -->
+<div class="hero" id="about">
+<img src="image.png" alt="Yeshdip Poudel">
+<h2>Hello, I'm <span style="color: crimson;">Yeshdip Poudel</span></h2>
+<p>I am Yeshdip Poudel, a passionate and curious student from Nepal with a deep love for technology and innovation. From exploring the realms of coding with Python, HTML, and CSS to diving into ethical hacking, pentesting, and bug hunting, I thrive on solving complex problems and creating impactful solutions. Beyond programming, I am fascinated by AI and game development, constantly experimenting with new projects like Smart Learn and GodGPT to push the boundaries of what technology can do. I take pride in my achievements, from school-level hackathons to design competitions, and I approach every challenge with creativity, determination, and a mindset to learn and grow. Driven by curiosity and a desire to make a difference, I aim to use my skills to innovate, inspire, and contribute meaningfully to the digital world.</p>
+</div>
+
+<!-- Skills -->
+<section id="skills">
+<h2>My Skills & Hobbies</h2>
+<div class="card-container">
+  <div class="card" onclick="window.open('https://www.google.com/search?q=Ethical+Hacking','_blank')">Ethical Hacking</div>
+  <div class="card" onclick="window.open('https://www.google.com/search?q=Python+Programming','_blank')">Python</div>
+  <div class="card" onclick="window.open('https://www.google.com/search?q=HTML+CSS+Web+Development','_blank')">HTML & CSS</div>
+  <div class="card" onclick="window.open('https://www.google.com/search?q=Vibe+Coding','_blank')">Vibe Coding</div>
+  <div class="card" onclick="window.open('https://www.google.com/search?q=Pentesting','_blank')">Pentesting</div>
+  <div class="card" onclick="window.open('https://www.google.com/search?q=Bug+Hunting','_blank')">Bug Hunting</div>
+</div>
+</section>
+
+<!-- Projects -->
+<!-- Projects -->
+<section id="projects">
+<h2>Projects</h2>
+<div class="card-container">
+  <div class="card" onclick="window.open('https://github.com/yeshdippoudel/Smart-Learn','_blank')">
+    📘 Smart Learn – AI-based career roadmap guide
+  </div>
+  <div class="card" onclick="window.open('https://github.com/yeshdippoudel/Hand-Gesture-Car','_blank')">
+    🚗 Hand Gesture Car – Control car with hand gestures
+  </div>
+  <div class="card" onclick="window.open('https://github.com/yeshdippoudel/Sword-Game','_blank')">
+    🎮 Sword Game – Endless zombie runner
+  </div>
+  <div class="card" onclick="window.open('https://github.com/yeshdippoudel/GodGPT','_blank')">
+    🤖 GodGPT – All-in-one AI chatbot
+  </div>
+  <div class="card" onclick="window.open('https://github.com/yeshdippoudel/AstroAI','_blank')">
+    🛰️ AstroAI – AI space analyzer project
+  </div>
+</div>
+</section>
+
+
+<!-- Achievements -->
+<section id="achievements">
+<h2>Achievements</h2>
+<div class="card-container">
+  <div class="card">DIGI School Book 1 & 2 Cleared, 3 In Progress</div>
+  <div class="card">DIGI Club Phase 2 (HTML & CSS 2081)</div>
+  <div class="card">Certificate of Achievement – DIGI Club Phase 1</div>
+  <div class="card">Figma Design Competition</div>
+  <div class="card">Nepal’s First School-Level AI Hackathon (Best Collaboration – 5th Jan 2025)</div>
+  <div class="card">Certificate of Recognition – AI Hackathon</div>
+  <div class="card">Winner – National School Coding Challenge 2024</div>
+  <div class="card">Finalist – Young Innovators Robotics Expo</div>
+  <div class="card">2nd Place – Ethical Hacking Inter-School Contest</div>
+  <div class="card">Best Project – Smart Tech School Expo 2023</div>
+</div>
+</section>
+
+<!-- Contact -->
+<section id="contact">
+<h2>Contact Me</h2>
+<p class="socials">
+  <a href="https://www.facebook.com/yeshdip.poudel.2025/">Facebook🌏</a> |
+  <a href="https://www.instagram.com/yeshdippoudel/">Instagram🌟</a> |
+  <a href="mailto:kripuyeshdip@gmail.com">Gmail:kripuyeshdip@gmail.com</a>
+  <a href="https://github.com/yeshdip">Github🌐</a>
+</p>
+</section>
+
+<!-- Footer -->
+<footer>
+© 2025 Yeshdip Poudel. Made with ❤️ and ☕.
+</footer>
+
+</body>
+</html>
