@@ -1,60 +1,55 @@
 /* =============================================
-   YESHDIP POUDEL — ULTRA PORTFOLIO v2
-   script.js
+   YESHDIP POUDEL — ULTRA PORTFOLIO v3
+   script.js — Full rewrite with new features
    ============================================= */
 
-// ─── 1. LOADING SCREEN w/ MATRIX ───
+// ─── 1. LOADING SCREEN ───
 (function initLoader() {
   document.body.style.overflow = 'hidden';
   const canvas = document.getElementById('loader-matrix');
+  if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
+  canvas.width  = window.innerWidth;
   canvas.height = window.innerHeight;
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()';
-  const cols = Math.floor(canvas.width / 16);
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()><{}[]';
+  const cols  = Math.floor(canvas.width / 16);
   const drops = Array(cols).fill(0);
-  let frame = 0;
-
-  const matrixInterval = setInterval(() => {
-    ctx.fillStyle = 'rgba(0,0,0,0.07)';
+  const mi = setInterval(() => {
+    ctx.fillStyle = 'rgba(0,0,0,0.08)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = '#dc143c';
     ctx.font = '13px Share Tech Mono, monospace';
     drops.forEach((y, i) => {
-      const char = chars[Math.floor(Math.random() * chars.length)];
-      ctx.fillText(char, i * 16, y * 16);
-      drops[i] = (y * 16 > canvas.height && Math.random() > 0.975) ? 0 : drops[i] + 1;
+      const c = chars[Math.floor(Math.random() * chars.length)];
+      ctx.fillText(c, i * 16, y * 16);
+      drops[i] = y * 16 > canvas.height && Math.random() > .975 ? 0 : drops[i] + 1;
     });
-    frame++;
   }, 40);
 
   const fill = document.getElementById('loader-fill');
   const pct  = document.getElementById('loader-pct');
   const txt  = document.getElementById('loader-text');
   const msgs = ['BOOTING SYSTEM...', 'LOADING MODULES...', 'INJECTING PAYLOAD...', 'BYPASSING FIREWALL...', 'ACCESS GRANTED ✓'];
-  let progress = 0;
-  const timer = setInterval(() => {
-    progress = Math.min(progress + Math.random() * 3.5, 100);
-    fill.style.width = progress + '%';
-    pct.textContent = Math.floor(progress) + '%';
-    txt.textContent = msgs[Math.min(Math.floor(progress / 25), msgs.length - 1)];
-    if (progress >= 100) {
-      clearInterval(timer);
-      clearInterval(matrixInterval);
+  let p = 0;
+  const t = setInterval(() => {
+    p = Math.min(p + Math.random() * 4, 100);
+    if (fill) fill.style.width = p + '%';
+    if (pct)  pct.textContent  = Math.floor(p) + '%';
+    if (txt)  txt.textContent  = msgs[Math.min(Math.floor(p / 25), msgs.length - 1)];
+    if (p >= 100) {
+      clearInterval(t);
+      clearInterval(mi);
       setTimeout(() => {
         document.getElementById('loader').classList.add('hidden');
         document.body.style.overflow = '';
-        runOnLoad();
-      }, 600);
+        startCounters();
+        animateSkillBars();
+        initUptime();
+        initInteractiveTerminal();
+      }, 650);
     }
   }, 50);
 })();
-
-function runOnLoad() {
-  startCounters();
-  animateSkillBars();
-  initUptime();
-}
 
 // ─── 2. CUSTOM CURSOR ───
 const cursor = document.getElementById('cursor');
@@ -62,207 +57,172 @@ const trail  = document.getElementById('cursor-trail');
 let mx = 0, my = 0, tx = 0, ty = 0;
 
 document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-
-function updateCursor() {
-  cursor.style.left = mx + 'px';
-  cursor.style.top  = my + 'px';
-  tx += (mx - tx) * 0.12;
-  ty += (my - ty) * 0.12;
-  trail.style.left = tx + 'px';
-  trail.style.top  = ty + 'px';
-  requestAnimationFrame(updateCursor);
-}
-updateCursor();
-
+(function animCursor() {
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+  tx += (mx - tx) * 0.11; ty += (my - ty) * 0.11;
+  trail.style.left = tx + 'px'; trail.style.top = ty + 'px';
+  requestAnimationFrame(animCursor);
+})();
 document.addEventListener('mousedown', () => cursor.style.transform = 'translate(-50%,-50%) scale(0.5)');
 document.addEventListener('mouseup',   () => cursor.style.transform = 'translate(-50%,-50%) scale(1)');
-document.querySelectorAll('a,button,.pcard,.ach-card,.blog-card,.stk-item,.tl-card').forEach(el => {
-  el.addEventListener('mouseenter', () => { cursor.style.width = '28px'; cursor.style.height = '28px'; });
-  el.addEventListener('mouseleave', () => { cursor.style.width = '14px'; cursor.style.height = '14px'; });
+document.querySelectorAll('a,button,.pcard,.ach-card,.blog-card,.stk-item,.tl-card,.svc-card,.testi-card,.sdot').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.style.width = '26px'; cursor.style.height = '26px'; });
+  el.addEventListener('mouseleave', () => { cursor.style.width = '12px'; cursor.style.height = '12px'; });
 });
 
-// ─── 3. PARTICLE SYSTEM ───
+// ─── 3. PARTICLES ───
 (function() {
   const c = document.getElementById('particles');
   const ctx = c.getContext('2d');
   let W, H, pts = [], mouse = { x: -9999, y: -9999 };
-
   function resize() { W = c.width = window.innerWidth; H = c.height = window.innerHeight; }
-
   class Pt {
     constructor() { this.reset(); }
     reset() {
       this.x = Math.random() * W; this.y = Math.random() * H;
-      this.vx = (Math.random() - .5) * .45; this.vy = (Math.random() - .5) * .45;
-      this.r = Math.random() * 1.4 + .4; this.o = Math.random() * .35 + .08;
+      this.vx = (Math.random()-.5)*.4; this.vy = (Math.random()-.5)*.4;
+      this.r = Math.random() * 1.3 + .4; this.o = Math.random() * .3 + .07;
     }
     update() {
-      const dx = this.x - mouse.x, dy = this.y - mouse.y;
-      const d = Math.sqrt(dx*dx + dy*dy);
-      if (d < 110) { this.vx += dx/d * .6; this.vy += dy/d * .6; }
+      const dx = this.x-mouse.x, dy = this.y-mouse.y, d = Math.sqrt(dx*dx+dy*dy);
+      if (d < 100) { this.vx += dx/d*.5; this.vy += dy/d*.5; }
       this.vx *= .98; this.vy *= .98;
       this.x += this.vx; this.y += this.vy;
-      if (this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
+      if (this.x<0||this.x>W||this.y<0||this.y>H) this.reset();
     }
-    draw() {
-      ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
-      ctx.fillStyle = `rgba(220,20,60,${this.o})`; ctx.fill();
-    }
+    draw() { ctx.beginPath(); ctx.arc(this.x,this.y,this.r,0,Math.PI*2); ctx.fillStyle=`rgba(220,20,60,${this.o})`; ctx.fill(); }
   }
-
-  function init() {
-    pts = [];
-    const n = Math.min(130, Math.floor(W * H / 10000));
-    for (let i = 0; i < n; i++) pts.push(new Pt());
-  }
-
+  function init() { pts=[]; const n=Math.min(120,Math.floor(W*H/12000)); for(let i=0;i<n;i++) pts.push(new Pt()); }
   function draw() {
-    ctx.clearRect(0, 0, W, H);
-    for (let i = 0; i < pts.length; i++) {
-      for (let j = i + 1; j < pts.length; j++) {
-        const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
-        const d = Math.sqrt(dx*dx + dy*dy);
-        if (d < 130) {
-          ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y);
-          ctx.strokeStyle = `rgba(220,20,60,${.14*(1-d/130)})`; ctx.lineWidth = .5; ctx.stroke();
-        }
-      }
+    ctx.clearRect(0,0,W,H);
+    for(let i=0;i<pts.length;i++) for(let j=i+1;j<pts.length;j++) {
+      const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y, d=Math.sqrt(dx*dx+dy*dy);
+      if(d<120){ ctx.beginPath(); ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y); ctx.strokeStyle=`rgba(220,20,60,${.12*(1-d/120)})`; ctx.lineWidth=.5; ctx.stroke(); }
     }
-    pts.forEach(p => { p.update(); p.draw(); });
+    pts.forEach(p=>{p.update();p.draw();});
     requestAnimationFrame(draw);
   }
-
-  document.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
-  window.addEventListener('resize', () => { resize(); init(); });
+  document.addEventListener('mousemove', e=>{mouse.x=e.clientX;mouse.y=e.clientY;});
+  window.addEventListener('resize',()=>{resize();init();});
   resize(); init(); draw();
 })();
 
-// ─── 4. SCROLL PROGRESS + NAVBAR + BACK TO TOP ───
+// ─── 4. SCROLL: progress + navbar + back-top + floating CTA + section dots ───
 const navbar  = document.getElementById('navbar');
 const backTop = document.getElementById('back-top');
 const scrollB = document.getElementById('scroll-bar');
+const hireCTA = document.getElementById('hire-cta');
+const allSecs = ['hero','about','services','skills','stack','projects','timeline','ctf','github','blog','achievements','testimonials','uses','contact'];
 
 window.addEventListener('scroll', () => {
   const s = window.scrollY, h = document.body.scrollHeight - window.innerHeight;
   scrollB.style.width = (s / h * 100) + '%';
   navbar.classList.toggle('scrolled', s > 50);
   backTop.classList.toggle('hidden', s < 400);
-  updateActiveNav();
+  // Floating hire CTA appears after scrolling past hero
+  const heroH = document.getElementById('hero')?.offsetHeight || 600;
+  hireCTA.classList.toggle('hidden', s < heroH * 0.6);
+  updateNav();
+  updateDots();
+});
+
+function updateNav() {
+  let cur = 'hero';
+  allSecs.forEach(id => { const el = document.getElementById(id); if(el && window.scrollY >= el.offsetTop - 100) cur = id; });
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === `#${cur}`));
+}
+
+function updateDots() {
+  let cur = 'hero';
+  allSecs.forEach(id => { const el = document.getElementById(id); if(el && window.scrollY >= el.offsetTop - 120) cur = id; });
+  document.querySelectorAll('.sdot').forEach(d => d.classList.toggle('active', d.dataset.sec === cur));
+}
+
+// Dot nav click
+document.querySelectorAll('.sdot').forEach(d => {
+  d.addEventListener('click', () => { const el = document.getElementById(d.dataset.sec); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); });
 });
 
 // ─── 5. LIVE TIME ───
 function updateTime() {
   const el = document.getElementById('live-time');
   if (!el) return;
-  const now = new Date();
-  const t = now.toLocaleTimeString('en-US', { hour12: false, timeZone: 'Asia/Kathmandu' });
-  el.textContent = `NPT ${t}`;
+  el.textContent = 'NPT ' + new Date().toLocaleTimeString('en-US', {hour12:false, timeZone:'Asia/Kathmandu'});
 }
-setInterval(updateTime, 1000);
-updateTime();
+setInterval(updateTime, 1000); updateTime();
 
 // ─── 6. HAMBURGER ───
 const ham = document.getElementById('hamburger');
-const mobMenu = document.getElementById('mobile-menu');
+const mob = document.getElementById('mobile-menu');
 let mobOpen = false;
-
 ham.addEventListener('click', () => {
   mobOpen = !mobOpen;
-  mobMenu.classList.toggle('hidden', !mobOpen);
-  const [s1, s2, s3] = ham.querySelectorAll('span');
-  if (mobOpen) {
-    s1.style.transform = 'rotate(45deg) translate(5px,5px)';
-    s2.style.opacity = '0';
-    s3.style.transform = 'rotate(-45deg) translate(5px,-5px)';
-  } else {
-    [s1, s2, s3].forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
-  }
+  mob.classList.toggle('hidden', !mobOpen);
+  const [s1,s2,s3] = ham.querySelectorAll('span');
+  if(mobOpen){ s1.style.transform='rotate(45deg) translate(5px,5px)'; s2.style.opacity='0'; s3.style.transform='rotate(-45deg) translate(5px,-5px)'; }
+  else { [s1,s2,s3].forEach(s=>{s.style.transform='';s.style.opacity='';}); }
 });
-window.closeMobile = function() {
-  mobOpen = false;
-  mobMenu.classList.add('hidden');
-  ham.querySelectorAll('span').forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
+window.closeMobile = () => {
+  mobOpen = false; mob.classList.add('hidden');
+  ham.querySelectorAll('span').forEach(s=>{s.style.transform='';s.style.opacity='';});
 };
 
 // ─── 7. TYPEWRITER ───
 (function() {
   const el = document.getElementById('typewriter');
   if (!el) return;
-  const roles = ['Ethical Hacker', 'Python Developer', 'AI Enthusiast', 'Bug Hunter', 'Game Developer', 'Problem Solver', 'CTF Player', 'Innovator from Nepal'];
-  let ri = 0, ci = 0, del = false;
+  const roles = ['Ethical Hacker','Python Developer','AI Enthusiast','Bug Hunter','Game Developer','CTF Player','Problem Solver','Innovator from Nepal 🇳🇵'];
+  let ri=0, ci=0, del=false;
   function type() {
     const r = roles[ri];
-    if (!del) { el.textContent = r.slice(0, ++ci); if (ci === r.length) { del = true; return setTimeout(type, 1800); } }
-    else { el.textContent = r.slice(0, --ci); if (ci === 0) { del = false; ri = (ri+1) % roles.length; } }
+    if(!del){ el.textContent=r.slice(0,++ci); if(ci===r.length){del=true;return setTimeout(type,1800);} }
+    else { el.textContent=r.slice(0,--ci); if(ci===0){del=false;ri=(ri+1)%roles.length;} }
     setTimeout(type, del ? 48 : 85);
   }
-  setTimeout(type, 1200);
+  setTimeout(type, 1400);
 })();
 
 // ─── 8. COUNTERS ───
-function countUp(el, target, suffix) {
+function countUp(el, target) {
   let cur = 0;
-  const step = Math.max(1, Math.ceil(target / 50));
-  const t = setInterval(() => {
-    cur = Math.min(cur + step, target);
-    el.textContent = cur;
-    if (cur >= target) { clearInterval(t); el.textContent = cur; }
-  }, 35);
+  const step = Math.max(1, Math.ceil(target / 55));
+  const t = setInterval(() => { cur = Math.min(cur+step, target); el.textContent = cur; if(cur>=target) clearInterval(t); }, 35);
 }
 function startCounters() {
-  document.querySelectorAll('.hstat-n, .anum-v').forEach(el => {
-    countUp(el, parseInt(el.dataset.t || el.dataset.target || 0));
-  });
+  document.querySelectorAll('.hstat-n, .anum-v').forEach(el => countUp(el, parseInt(el.dataset.t || 0)));
 }
 
 // ─── 9. UPTIME ───
 function initUptime() {
   const el = document.getElementById('uptime-line');
   if (!el) return;
-  const start = new Date('2022-01-01');
-  const diff = new Date() - start;
-  const days = Math.floor(diff / 86400000);
-  el.textContent = `${days} days of coding (and counting)`;
+  const d = Math.floor((new Date() - new Date('2022-01-01')) / 86400000);
+  el.textContent = `${d} days of coding (and counting)`;
 }
 
-// ─── 10. SCROLL REVEAL ───
-const revealObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('vis'); }
-  });
-}, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+// ─── 10. REVEAL ON SCROLL ───
+const revObs = new IntersectionObserver(e => { e.forEach(x => { if(x.isIntersecting) x.target.classList.add('vis'); }); }, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
 
 // ─── 11. SKILL BARS ───
 function animateSkillBars() {
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.querySelectorAll('.skb-fill').forEach(bar => {
-          setTimeout(() => bar.style.width = bar.dataset.width + '%', 200);
-        });
-      }
-    });
+  const obs = new IntersectionObserver(e => {
+    e.forEach(x => { if(x.isIntersecting) x.target.querySelectorAll('.skb-fill').forEach(b => setTimeout(()=>b.style.width=b.dataset.width+'%', 200)); });
   }, { threshold: 0.2 });
-  document.querySelectorAll('#skills').forEach(el => obs.observe(el));
+  const sec = document.getElementById('skills');
+  if(sec) obs.observe(sec);
 }
 
 // ─── 12. PROJECT FILTER ───
 document.querySelectorAll('.fb').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.fb').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.fb').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
     const f = btn.dataset.f;
     document.querySelectorAll('.pcard').forEach(card => {
-      const show = f === 'all' || card.dataset.c === f;
-      if (show) {
-        card.style.display = '';
-        card.style.animation = 'none';
-        void card.offsetWidth;
-        card.style.animation = 'fade-up .4s ease forwards';
-      } else {
-        card.style.display = 'none';
-      }
+      const show = f==='all' || card.dataset.c===f;
+      card.style.display = show ? '' : 'none';
+      if(show){ card.style.animation='none'; void card.offsetWidth; card.style.animation='fade-up .4s ease forwards'; }
     });
   });
 });
@@ -270,174 +230,280 @@ document.querySelectorAll('.fb').forEach(btn => {
 // ─── 13. 3D TILT ───
 document.querySelectorAll('.tilt').forEach(card => {
   card.addEventListener('mousemove', e => {
-    const rect = card.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width  - 0.5;
-    const y = (e.clientY - rect.top)  / rect.height - 0.5;
-    card.style.transform = `translateY(-8px) perspective(800px) rotateX(${-y*10}deg) rotateY(${x*10}deg) scale(1.02)`;
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX-r.left)/r.width-.5, y = (e.clientY-r.top)/r.height-.5;
+    card.style.transform = `translateY(-6px) perspective(800px) rotateX(${-y*8}deg) rotateY(${x*8}deg) scale(1.02)`;
   });
-  card.addEventListener('mouseleave', () => {
-    card.style.transform = '';
-  });
+  card.addEventListener('mouseleave', () => card.style.transform = '');
 });
 
 // ─── 14. PROJECT MODALS ───
 const modalData = {
-  smartlearn: {
-    emoji: '📘', title: 'Smart Learn',
-    desc: 'Smart Learn is an AI-powered career roadmap generator that analyzes a student\'s interests, skill level, and goals to build personalized step-by-step learning paths with curated resources, timelines, and progress tracking.',
-    tech: ['Python', 'Machine Learning', 'NLP', 'Flask', 'HTML/CSS'],
-    link: 'https://github.com/yeshdippoudel/Smart-Learn',
-    features: ['AI-generated personalized roadmaps', 'Skill gap analysis', 'Resource recommendations', 'Progress tracking dashboard']
-  },
-  handcar: {
-    emoji: '🚗', title: 'Hand Gesture Car',
-    desc: 'A real-time hand gesture controlled RC car that uses computer vision to detect hand positions via webcam and translates them into directional signals for an Arduino-powered car over serial communication.',
-    tech: ['Python', 'OpenCV', 'MediaPipe', 'Arduino', 'Serial Comm'],
-    link: 'https://github.com/yeshdippoudel/Hand-Gesture-Car',
-    features: ['Real-time gesture recognition', 'Arduino motor control', 'Low-latency serial comms', '5 gesture directions supported']
-  },
-  swordgame: {
-    emoji: '🎮', title: 'Sword Game',
-    desc: 'An endless zombie runner game built entirely from scratch with Pygame. Features dynamic difficulty scaling, sprite animations, collision detection, particle effects, and persistent high-score tracking via file I/O.',
-    tech: ['Python', 'Pygame', 'Sprite Animation', 'Game Physics'],
-    link: 'https://github.com/yeshdippoudel/Sword-Game',
-    features: ['Dynamic difficulty curve', 'Custom sprite sheets', 'Physics-based collision', 'Local high score persistence']
-  },
-  godgpt: {
-    emoji: '🤖', title: 'GodGPT',
-    desc: 'GodGPT is an all-in-one AI chatbot interface that unifies multiple language model APIs into a single sleek UI. Supports multi-turn conversations, code generation, creative writing, and conversation history export.',
-    tech: ['Python', 'NLP', 'REST APIs', 'HTML/CSS', 'JavaScript'],
-    link: 'https://github.com/yeshdippoudel/GodGPT',
-    features: ['Multi-model support', 'Conversation memory', 'Code generation mode', 'Export chat history']
-  },
-  astroai: {
-    emoji: '🛰️', title: 'AstroAI',
-    desc: 'AstroAI processes astronomical datasets from NASA and other open sources, uses ML classification to identify celestial objects, and generates human-readable natural language insights about discovered phenomena.',
-    tech: ['Python', 'AI/ML', 'NumPy', 'Matplotlib', 'NASA API'],
-    link: 'https://github.com/yeshdippoudel/AstroAI',
-    features: ['NASA dataset integration', 'ML object classification', 'Natural language insights', 'Interactive sky visualizations']
-  }
+  smartlearn:{ emoji:'📘', title:'Smart Learn', desc:'Smart Learn is an AI-powered career roadmap generator that analyzes a student\'s interests, skill level, and goals to build personalized step-by-step learning paths with curated resources, timelines, and progress tracking.', tech:['Python','Machine Learning','NLP','Flask','HTML/CSS'], link:'https://github.com/yeshdippoudel/Smart-Learn', features:['AI-generated personalized roadmaps','Skill gap analysis','Resource recommendations','Progress tracking dashboard'] },
+  handcar:{ emoji:'🚗', title:'Hand Gesture Car', desc:'A real-time hand gesture controlled RC car using computer vision to detect hand positions via webcam and translate them into directional signals for an Arduino-powered car over serial communication.', tech:['Python','OpenCV','MediaPipe','Arduino','Serial Comm'], link:'https://github.com/yeshdippoudel/Hand-Gesture-Car', features:['Real-time gesture recognition','Arduino motor control','Low-latency serial comms','5 gesture directions'] },
+  swordgame:{ emoji:'🎮', title:'Sword Game', desc:'An endless zombie runner game built from scratch with Pygame. Features dynamic difficulty scaling, sprite animations, collision detection, particle effects, and persistent high-score tracking via file I/O.', tech:['Python','Pygame','Sprite Animation','Physics'], link:'https://github.com/yeshdippoudel/Sword-Game', features:['Dynamic difficulty curve','Custom sprite sheets','Physics-based collision','Local high score persistence'] },
+  godgpt:{ emoji:'🤖', title:'GodGPT', desc:'GodGPT is an all-in-one AI chatbot interface that unifies multiple language model APIs. Supports multi-turn conversations, code generation, creative writing, and conversation history export.', tech:['Python','NLP','REST APIs','HTML/CSS','JavaScript'], link:'https://github.com/yeshdippoudel/GodGPT', features:['Multi-model support','Conversation memory','Code generation mode','Export chat history'] },
+  astroai:{ emoji:'🛰️', title:'AstroAI', desc:'AstroAI processes astronomical datasets from NASA, uses ML to classify celestial objects, and generates human-readable natural language insights about discovered phenomena.', tech:['Python','AI/ML','NumPy','Matplotlib','NASA API'], link:'https://github.com/yeshdippoudel/AstroAI', features:['NASA dataset integration','ML classification','Natural language insights','Sky visualizations'] }
 };
-
 window.openModal = function(id) {
-  const d = modalData[id];
-  if (!d) return;
+  const d = modalData[id]; if(!d) return;
   document.getElementById('modal-body').innerHTML = `
     <div class="modal-em">${d.emoji}</div>
     <div class="modal-title">${d.title}</div>
     <p class="modal-desc">${d.desc}</p>
-    <div class="modal-tech">${d.tech.map(t => `<span>${t}</span>`).join('')}</div>
+    <div class="modal-tech">${d.tech.map(t=>`<span>${t}</span>`).join('')}</div>
     <div class="modal-feat">
       <div class="modal-feat-title">// KEY FEATURES</div>
-      <ul>${d.features.map(f => `<li>${f}</li>`).join('')}</ul>
+      <ul>${d.features.map(f=>`<li>${f}</li>`).join('')}</ul>
     </div>
     <div class="modal-links" style="margin-top:1.2rem">
       <a href="${d.link}" target="_blank" class="btn-primary">VIEW ON GITHUB →</a>
     </div>`;
   document.getElementById('modal-ov').classList.remove('hidden');
 };
-window.closeModal = function() { document.getElementById('modal-ov').classList.add('hidden'); };
-window.closeModalOut = function(e) { if (e.target === document.getElementById('modal-ov')) closeModal(); };
+window.closeModal = () => document.getElementById('modal-ov').classList.add('hidden');
 
 // ─── 15. COMMAND PALETTE ───
-const navSections = [
-  {id:'hero',       label:'Home',           num:'01'},
-  {id:'about',      label:'About Me',       num:'02'},
-  {id:'skills',     label:'Skills',         num:'03'},
-  {id:'stack',      label:'Tech Stack',     num:'04'},
-  {id:'projects',   label:'Projects',       num:'05'},
-  {id:'timeline',   label:'My Journey',     num:'06'},
-  {id:'ctf',        label:'CTF & Security', num:'07'},
-  {id:'blog',       label:'Blog',           num:'08'},
-  {id:'achievements',label:'Achievements', num:'09'},
-  {id:'uses',       label:'My Setup',       num:'10'},
-  {id:'contact',    label:'Contact',        num:'11'},
+const navItems = [
+  {id:'hero',title:'Home',n:'01'},{id:'about',title:'About Me',n:'02'},
+  {id:'services',title:'Services',n:'03'},{id:'skills',title:'Skills',n:'04'},
+  {id:'stack',title:'Tech Stack',n:'05'},{id:'projects',title:'Projects',n:'06'},
+  {id:'timeline',title:'My Journey',n:'07'},{id:'ctf',title:'CTF & Security',n:'08'},
+  {id:'github',title:'GitHub Stats',n:'09'},{id:'blog',title:'Blog',n:'10'},
+  {id:'achievements',title:'Achievements',n:'11'},{id:'testimonials',title:'Testimonials',n:'12'},
+  {id:'uses',title:'My Setup',n:'13'},{id:'contact',title:'Contact',n:'14'},
 ];
 let cmdIdx = 0;
-
-window.openCmd = function() {
-  const ov = document.getElementById('cmd-overlay');
-  ov.classList.remove('hidden');
-  document.getElementById('cmd-input').value = '';
+window.openCmd = () => {
+  document.getElementById('cmd-overlay').classList.remove('hidden');
+  document.getElementById('cmd-input').value='';
   document.getElementById('cmd-input').focus();
-  cmdIdx = 0;
-  renderCmd(navSections);
+  cmdIdx=0; renderCmd(navItems);
 };
-window.closeCmd = function() { document.getElementById('cmd-overlay').classList.add('hidden'); };
+window.closeCmd = () => document.getElementById('cmd-overlay').classList.add('hidden');
 
 function renderCmd(items) {
   const ul = document.getElementById('cmd-list');
-  ul.innerHTML = items.map((item, i) => `
-    <li class="cmd-item${i === 0 ? ' active' : ''}" data-id="${item.id}">
-      <span class="cmd-k">${item.num}</span>${item.label}
-    </li>`).join('');
-  ul.querySelectorAll('.cmd-item').forEach(li => {
-    li.addEventListener('click', () => { navTo(li.dataset.id); closeCmd(); });
-  });
+  ul.innerHTML = items.map((item,i)=>`<li class="cmd-item${i===0?' active':''}" data-id="${item.id}"><span class="cmd-k">${item.n}</span>${item.title}</li>`).join('');
+  ul.querySelectorAll('.cmd-item').forEach(li=>li.addEventListener('click',()=>{navTo(li.dataset.id);closeCmd();}));
 }
-function setCmd(i) {
-  cmdIdx = i;
-  document.querySelectorAll('.cmd-item').forEach((el, idx) => el.classList.toggle('active', idx === cmdIdx));
-}
-
-document.getElementById('cmd-input').addEventListener('input', e => {
-  const q = e.target.value.toLowerCase();
-  const filt = navSections.filter(s => s.label.toLowerCase().includes(q) || s.id.includes(q)).map((s, i) => ({ ...s, num: String(i+1).padStart(2,'0') }));
-  cmdIdx = 0;
-  renderCmd(filt.length ? filt : navSections);
+function setCmd(i) { cmdIdx=i; document.querySelectorAll('.cmd-item').forEach((el,idx)=>el.classList.toggle('active',idx===cmdIdx)); }
+document.getElementById('cmd-input').addEventListener('input', e=>{
+  const q=e.target.value.toLowerCase();
+  const f=navItems.filter(s=>s.title.toLowerCase().includes(q)||s.id.includes(q)).map((s,i)=>({...s,n:String(i+1).padStart(2,'0')}));
+  cmdIdx=0; renderCmd(f.length?f:navItems);
 });
+document.getElementById('cmd-input').addEventListener('keydown', e=>{
+  const items=document.querySelectorAll('.cmd-item');
+  if(e.key==='ArrowDown'){setCmd(Math.min(cmdIdx+1,items.length-1));e.preventDefault();}
+  else if(e.key==='ArrowUp'){setCmd(Math.max(cmdIdx-1,0));e.preventDefault();}
+  else if(e.key==='Enter'){const a=document.querySelector('.cmd-item.active');if(a){navTo(a.dataset.id);closeCmd();}}
+});
+document.getElementById('cmd-overlay').addEventListener('click',e=>{if(e.target===document.getElementById('cmd-overlay'))closeCmd();});
+document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key==='k'){e.preventDefault();document.getElementById('cmd-overlay').classList.contains('hidden')?openCmd():closeCmd();}
+  if(e.key==='Escape'){closeCmd();closeModal();}
+});
+function navTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
 
-document.getElementById('cmd-input').addEventListener('keydown', e => {
-  const items = document.querySelectorAll('.cmd-item');
-  if (e.key === 'ArrowDown') { setCmd(Math.min(cmdIdx+1, items.length-1)); e.preventDefault(); }
-  else if (e.key === 'ArrowUp') { setCmd(Math.max(cmdIdx-1, 0)); e.preventDefault(); }
-  else if (e.key === 'Enter') {
-    const active = document.querySelector('.cmd-item.active');
-    if (active) { navTo(active.dataset.id); closeCmd(); }
+// ─── 16. INTERACTIVE TERMINAL ───
+function initInteractiveTerminal() {
+  const input  = document.getElementById('term-input');
+  const output = document.getElementById('term-output');
+  if (!input || !output) return;
+
+  const cmds = {
+    help: () => [
+      {t:'info',  v:'Available commands:'},
+      {t:'info',  v:'  whoami    — who is Yeshdip'},
+      {t:'info',  v:'  skills    — list skills'},
+      {t:'info',  v:'  projects  — list projects'},
+      {t:'info',  v:'  contact   — contact info'},
+      {t:'info',  v:'  github    — GitHub profile'},
+      {t:'info',  v:'  clear     — clear terminal'},
+      {t:'info',  v:'  hack      — try your luck 😈'},
+    ],
+    whoami: () => [
+      {t:'out', v:'Yeshdip Poudel'},
+      {t:'out', v:'Ethical Hacker | Python Dev | AI Builder'},
+      {t:'out', v:'Location: Kathmandu, Nepal 🇳🇵'},
+      {t:'out', v:'Status: Building & Breaking Things 🔥'},
+    ],
+    skills: () => [
+      {t:'out', v:'[■■■■■■■■■░] HTML/CSS      90%'},
+      {t:'out', v:'[■■■■■■■■░░] Python        82%'},
+      {t:'out', v:'[■■■■■■■■░░] Eth. Hacking  85%'},
+      {t:'out', v:'[■■■■■■■░░░] Pentesting    78%'},
+      {t:'out', v:'[■■■■■■■░░░] AI/ML         75%'},
+      {t:'out', v:'[■■■■■■■░░░] Game Dev      70%'},
+    ],
+    projects: () => [
+      {t:'out', v:'📘 Smart Learn    — AI career roadmap'},
+      {t:'out', v:'🚗 Hand Gesture Car — CV + Arduino'},
+      {t:'out', v:'🎮 Sword Game     — Pygame zombie runner'},
+      {t:'out', v:'🤖 GodGPT         — AI chatbot'},
+      {t:'out', v:'🛰️ AstroAI        — Space AI analyzer'},
+    ],
+    contact: () => [
+      {t:'out', v:'📧 kripuyeshdip@gmail.com'},
+      {t:'out', v:'💻 github.com/yeshdip'},
+      {t:'out', v:'📷 @yeshdippoudel'},
+    ],
+    github: () => [
+      {t:'out', v:'Opening GitHub...'},
+    ],
+    hack: () => [
+      {t:'info', v:'[*] Initializing exploit...'},
+      {t:'info', v:'[*] Scanning target... 127.0.0.1'},
+      {t:'info', v:'[*] Port 80 open — HTTP detected'},
+      {t:'err',  v:'[!] Access denied. Nice try 😈'},
+      {t:'info', v:'[*] Tip: Try the Konami Code instead ;)'},
+    ],
+    clear: () => 'CLEAR',
+    ls:     () => [{t:'out',v:'about.txt  skills/  projects/  contact.json  secret.enc'}],
+    pwd:    () => [{t:'out',v:'/home/yeshdip/portfolio'}],
+    date:   () => [{t:'out',v: new Date().toLocaleString()}],
+    uname:  () => [{t:'out',v:'YeshdipOS v2.0 — Nepal Edition 🇳🇵'}],
+    cat:    () => [{t:'err',v:'Usage: cat <filename>  (try: cat about.txt)'}],
+    'cat about.txt': () => [
+      {t:'out',v:'Name:     Yeshdip Poudel'},
+      {t:'out',v:'Role:     Hacker & Developer'},
+      {t:'out',v:'Location: Nepal 🇳🇵'},
+      {t:'out',v:'Mission:  Innovate. Inspire. Impact.'},
+    ],
+  };
+
+  function addLine(type, text) {
+    const div = document.createElement('div');
+    if(type === 'cmd') div.innerHTML = `<span class="tp">$</span> ${escHtml(text)}`;
+    else if(type === 'out')  div.innerHTML = `<span class="to">${escHtml(text)}</span>`;
+    else if(type === 'info') div.innerHTML = `<span class="t-info">${escHtml(text)}</span>`;
+    else if(type === 'err')  div.innerHTML = `<span class="t-err">${escHtml(text)}</span>`;
+    output.appendChild(div);
+    output.scrollTop = output.scrollHeight;
   }
-});
 
-document.getElementById('cmd-overlay').addEventListener('click', e => {
-  if (e.target === document.getElementById('cmd-overlay')) closeCmd();
-});
+  function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-document.addEventListener('keydown', e => {
-  if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); document.getElementById('cmd-overlay').classList.contains('hidden') ? openCmd() : closeCmd(); }
-  if (e.key === 'Escape') { closeCmd(); closeModal(); }
-});
-
-function navTo(id) {
-  const el = document.getElementById(id);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-// ─── 16. ACTIVE NAV ON SCROLL ───
-const allSectionIds = ['hero','about','skills','stack','projects','timeline','ctf','blog','achievements','uses','contact'];
-
-function updateActiveNav() {
-  let cur = 'hero';
-  allSectionIds.forEach(id => {
-    const el = document.getElementById(id);
-    if (el && window.scrollY >= el.offsetTop - 100) cur = id;
-  });
-  document.querySelectorAll('.nav-links a').forEach(a => {
-    a.classList.toggle('active', a.getAttribute('href') === `#${cur}`);
+  input.addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    const val = input.value.trim().toLowerCase();
+    input.value = '';
+    if (!val) return;
+    addLine('cmd', val);
+    const fn = cmds[val];
+    if (!fn) { addLine('err', `command not found: ${val}. Type 'help' for options.`); return; }
+    const result = fn();
+    if (result === 'CLEAR') { output.innerHTML = ''; return; }
+    result.forEach(r => addLine(r.t, r.v));
+    if (val === 'github') window.open('https://github.com/yeshdip', '_blank');
   });
 }
 
-// ─── 17. AI CHATBOT ───
-const chatCtx = `You are the AI assistant on Yeshdip Poudel's portfolio website. Answer ONLY questions about Yeshdip. Keep answers SHORT and punchy (2-3 sentences). Speak in a futuristic, slightly hacker-like tone. Never break character.
+// ─── 17. TOAST SYSTEM ───
+window.showToast = function(msg, type='success', duration=3000) {
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.innerHTML = `<span class="toast-icon">${type==='success'?'✅':'❌'}</span><span>${msg}</span>`;
+  c.appendChild(t);
+  setTimeout(() => { t.classList.add('out'); setTimeout(()=>t.remove(), 350); }, duration);
+};
+
+// ─── 18. COPY EMAIL ───
+window.copyEmail = function() {
+  const email = 'kripuyeshdip@gmail.com';
+  navigator.clipboard.writeText(email).then(() => {
+    const hint = document.getElementById('copy-hint');
+    if(hint){ hint.textContent = 'COPIED!'; setTimeout(()=>hint.textContent='COPY',2000); }
+    showToast('Email copied to clipboard!', 'success');
+  }).catch(() => showToast('Copy failed — email: kripuyeshdip@gmail.com', 'error'));
+};
+
+// ─── 19. DOWNLOAD CV ───
+window.downloadCV = function() {
+  const content = `YESHDIP POUDEL — CURRICULUM VITAE
+================================
+Location : Kathmandu, Nepal 🇳🇵
+Email    : kripuyeshdip@gmail.com
+GitHub   : github.com/yeshdip
+Instagram: @yeshdippoudel
+
+SKILLS
+------
+• HTML & CSS      — 90%
+• Ethical Hacking — 85%
+• Python          — 82%
+• Pentesting      — 78%
+• AI / ML         — 75%
+• Bug Hunting     — 72%
+• Game Dev        — 70%
+• UI/UX Design    — 68%
+
+PROJECTS
+--------
+• Smart Learn      — AI-powered career roadmap generator
+• Hand Gesture Car — CV + Arduino RC car control
+• Sword Game       — Pygame endless zombie runner
+• GodGPT           — All-in-one AI chatbot
+• AstroAI          — Space data AI analyzer
+
+KEY ACHIEVEMENTS
+----------------
+• Winner — National School Coding Challenge 2024
+• Best Collaboration — Nepal's 1st School AI Hackathon (2025)
+• 2nd Place — Ethical Hacking Inter-School Contest 2024
+• Best Project — Smart Tech School Expo 2023
+• Finalist — Young Innovators Robotics Expo 2024
+• DIGI Club Phase 1 & 2 Certificates
+
+SECURITY PLATFORMS
+------------------
+• TryHackMe | HackTheBox | PicoCTF | Bugcrowd
+
+Generated from: yeshdippoudel.github.io`;
+
+  const blob = new Blob([content], {type:'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'Yeshdip_Poudel_CV.txt';
+  a.click();
+  showToast('CV downloaded!', 'success');
+};
+
+// ─── 20. BLOG SUBSCRIBE ───
+window.subscribe = function() {
+  const email = document.getElementById('sub-email').value.trim();
+  const msg   = document.getElementById('sub-msg');
+  if(!email || !email.includes('@')){ showToast('Please enter a valid email', 'error'); return; }
+  document.getElementById('sub-email').value = '';
+  msg.classList.remove('hidden');
+  showToast('You\'re subscribed! 🎉', 'success');
+  setTimeout(()=>msg.classList.add('hidden'), 5000);
+};
+
+// ─── 21. AI CHATBOT (Groq — FREE, no credit card) ───
+//
+// 🔑 STEP 1: Go to https://console.groq.com/keys
+// 🔑 STEP 2: Sign up free → click "Create API Key"
+// 🔑 STEP 3: Paste your key below replacing YOUR_GROQ_KEY_HERE
+//
+const GROQ_API_KEY = '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';
+const GROQ_MODEL   = 'llama-3.1-8b-instant'; // free & fast — alternatives: gemma2-9b-it, mixtral-8x7b-32768
+
+const chatCtx = `You are YP·BOT, the AI assistant on Yeshdip Poudel's portfolio website. Answer ONLY questions about Yeshdip. Keep answers SHORT and punchy (2-3 sentences max). Use a friendly, slightly hacker-ish tone. Never break character.
 
 ABOUT YESHDIP:
-- Student from Kathmandu, Nepal passionate about tech
+- Student from Kathmandu, Nepal 🇳🇵
 - Skills: Python, HTML/CSS, Ethical Hacking, Pentesting, Bug Hunting, AI/ML, Game Dev, UI/UX
-- Projects: Smart Learn (AI career guide), Hand Gesture Car (CV+Arduino), Sword Game (Pygame), GodGPT (AI chatbot), AstroAI (space AI)
-- Security tools: Kali Linux, Wireshark, Nmap, Burp Suite, SQLMap
-- Active on: TryHackMe, HackTheBox, PicoCTF, Bugcrowd
-- Achievements: National School Coding Challenge 2024 winner, 2nd place Ethical Hacking contest, Best Collaboration AI Hackathon, Best Project Expo 2023
+- Projects: Smart Learn (AI career guide), Hand Gesture Car (CV+Arduino), Sword Game (Pygame), GodGPT (AI chatbot), AstroAI (NASA space AI)
+- Security: Kali Linux, Wireshark, Nmap, Burp Suite, SQLMap | Active on TryHackMe & HackTheBox
+- Wins: National School Coding Challenge 2024 winner, 2nd place Ethical Hacking Contest, Best Collaboration AI Hackathon Jan 2025, Best Project Expo 2023
 - Contact: kripuyeshdip@gmail.com | GitHub: yeshdip | Instagram: yeshdippoudel
-- Goal: Innovate, inspire, make an impact in the digital world
-- Currently available for projects, collaborations, and internships`;
+- Currently available for projects, collabs & internships. Goal: Innovate, inspire, impact.`;
+
+// Keep conversation history for multi-turn context
+const chatHistory = [];
 
 window.quickAsk = function(q) {
   document.getElementById('cb-input').value = q;
@@ -451,132 +517,128 @@ window.sendChat = async function() {
   if (!text) return;
   input.value = '';
 
-  // Remove quick buttons
-  const quick = msgs.querySelector('.cb-quick');
-  if (quick) quick.remove();
+  // Remove quick-reply buttons once used
+  document.querySelector('.cb-quick')?.remove();
 
-  // User message
-  const userDiv = document.createElement('div');
-  userDiv.className = 'cb-msg user-m';
-  userDiv.textContent = text;
-  msgs.appendChild(userDiv);
+  // Show user message
+  const um = document.createElement('div');
+  um.className = 'cb-msg user-m';
+  um.textContent = text;
+  msgs.appendChild(um);
 
   // Typing indicator
-  const typingDiv = document.createElement('div');
-  typingDiv.className = 'cb-msg typing-m';
-  typingDiv.innerHTML = '<span class="cb-from">YP·BOT</span>typing...';
-  msgs.appendChild(typingDiv);
+  const tm = document.createElement('div');
+  tm.className = 'cb-msg typing-m';
+  tm.innerHTML = '<span class="cb-from">YP·BOT</span><span class="dot-anim">●  ●  ●</span>';
+  msgs.appendChild(tm);
   msgs.scrollTop = msgs.scrollHeight;
+
+  // Add to history
+  chatHistory.push({ role: 'user', content: text });
+
+  // Key not set — show friendly guide
+  if (!GROQ_API_KEY || GROQ_API_KEY === 'YOUR_GROQ_KEY_HERE') {
+    tm.remove();
+    const bm = document.createElement('div');
+    bm.className = 'cb-msg bot-m';
+    bm.innerHTML = `<span class="cb-from">YP·BOT</span>⚠️ API key not set yet! Open <code>script.js</code>, find <code>GROQ_API_KEY</code> and paste your free Groq key. Get one free at <a href="https://console.groq.com/keys" target="_blank" style="color:var(--red)">console.groq.com/keys</a> 🔑`;
+    msgs.appendChild(bm);
+    msgs.scrollTop = msgs.scrollHeight;
+    return;
+  }
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${GROQ_API_KEY}`
+      },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: chatCtx,
-        messages: [{ role: 'user', content: text }]
+        model: GROQ_MODEL,
+        max_tokens: 180,
+        temperature: 0.75,
+        messages: [
+          { role: 'system', content: chatCtx },
+          ...chatHistory.slice(-8) // keep last 8 turns for context
+        ]
       })
     });
+
     const data = await res.json();
-    const reply = data.content?.[0]?.text || "System glitch. Try emailing kripuyeshdip@gmail.com!";
-    typingDiv.remove();
-    const botDiv = document.createElement('div');
-    botDiv.className = 'cb-msg bot-m';
-    botDiv.innerHTML = `<span class="cb-from">YP·BOT</span>${reply}`;
-    msgs.appendChild(botDiv);
-  } catch {
-    typingDiv.remove();
-    const botDiv = document.createElement('div');
-    botDiv.className = 'cb-msg bot-m';
-    botDiv.innerHTML = `<span class="cb-from">YP·BOT</span>Connection lost. Reach out directly at kripuyeshdip@gmail.com 📧`;
-    msgs.appendChild(botDiv);
+
+    if (data.error) throw new Error(data.error.message);
+
+    const reply = data.choices?.[0]?.message?.content?.trim()
+      || 'Hmm, got no response. Try again!';
+
+    // Add bot reply to history
+    chatHistory.push({ role: 'assistant', content: reply });
+
+    tm.remove();
+    const bm = document.createElement('div');
+    bm.className = 'cb-msg bot-m';
+    bm.innerHTML = `<span class="cb-from">YP·BOT <span style="opacity:.4;font-size:.5rem">(llama-3.1)</span></span>${reply}`;
+    msgs.appendChild(bm);
+
+  } catch (err) {
+    tm.remove();
+    const bm = document.createElement('div');
+    bm.className = 'cb-msg bot-m';
+    const isKeyErr = err.message?.toLowerCase().includes('auth') || err.message?.toLowerCase().includes('api');
+    bm.innerHTML = `<span class="cb-from">YP·BOT</span>${
+      isKeyErr
+        ? '❌ API key error — double-check your Groq key in script.js!'
+        : '📡 Connection lost. Email me at kripuyeshdip@gmail.com!'
+    }`;
+    msgs.appendChild(bm);
   }
+
   msgs.scrollTop = msgs.scrollHeight;
 };
 
-document.getElementById('cb-input').addEventListener('keydown', e => { if (e.key === 'Enter') sendChat(); });
+document.getElementById('cb-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') sendChat();
+});
 
-// ─── 18. BLOG SUBSCRIBE ───
-window.subscribe = function() {
-  const email = document.getElementById('sub-email').value.trim();
-  const msg   = document.getElementById('sub-msg');
-  if (!email || !email.includes('@')) return;
-  document.getElementById('sub-email').value = '';
-  msg.classList.remove('hidden');
-  setTimeout(() => msg.classList.add('hidden'), 4000);
-};
-
-// ─── 19. MUSIC PLAYER (Web Audio API ambient) ───
-let audioCtx = null, playing = false, gainNode = null, oscNodes = [];
-
+// ─── 22. MUSIC PLAYER (Web Audio) ───
+let actx=null, aplay=false, again=null;
 window.toggleMusic = function() {
-  const btn = document.getElementById('music-btn');
-  const bars = document.getElementById('music-bars');
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    gainNode = audioCtx.createGain();
-    gainNode.gain.setValueAtTime(0.04, audioCtx.currentTime);
-    gainNode.connect(audioCtx.destination);
-    const freqs = [40, 60, 80, 120, 160, 220];
-    freqs.forEach(f => {
-      const o = audioCtx.createOscillator();
-      o.type = 'sine'; o.frequency.setValueAtTime(f, audioCtx.currentTime);
-      o.connect(gainNode); o.start();
-      oscNodes.push(o);
-    });
-    playing = true;
+  const btn=document.getElementById('music-btn'), bars=document.getElementById('music-bars');
+  if(!actx){
+    actx=new(window.AudioContext||window.webkitAudioContext)();
+    again=actx.createGain(); again.gain.value=0.035; again.connect(actx.destination);
+    [40,60,80,120,160,200].forEach(f=>{const o=actx.createOscillator();o.type='sine';o.frequency.value=f;o.connect(again);o.start();});
+    aplay=true;
   } else {
-    if (playing) { gainNode.gain.setTargetAtTime(0, audioCtx.currentTime, .5); playing = false; }
-    else { gainNode.gain.setTargetAtTime(0.04, audioCtx.currentTime, .5); playing = true; }
+    aplay=!aplay;
+    again.gain.setTargetAtTime(aplay?.035:0,actx.currentTime,.5);
   }
-  btn.textContent = playing ? '🔊' : '🎵';
-  bars.classList.toggle('hidden', !playing);
+  btn.textContent=aplay?'🔊':'🎵';
+  bars.classList.toggle('hidden',!aplay);
 };
 
-// ─── 20. MATRIX RAIN EASTER EGG ───
-let matrixActive = false;
-let matrixInterval2 = null;
-
-function activateMatrix() {
-  if (matrixActive) return;
-  matrixActive = true;
-  const canvas = document.getElementById('matrix-rain');
-  const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  canvas.classList.remove('hidden');
-  const cols = Math.floor(canvas.width / 16);
-  const drops = Array(cols).fill(0);
-  const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%';
-  matrixInterval2 = setInterval(() => {
-    ctx.fillStyle = 'rgba(0,0,0,0.05)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#dc143c'; ctx.font = '14px Share Tech Mono, monospace';
-    drops.forEach((y, i) => {
-      ctx.fillText(chars[Math.floor(Math.random()*chars.length)], i*16, y*16);
-      drops[i] = (y*16 > canvas.height && Math.random() > .975) ? 0 : drops[i]+1;
-    });
-  }, 33);
-  setTimeout(() => {
-    clearInterval(matrixInterval2);
-    canvas.classList.add('hidden');
-    matrixActive = false;
-  }, 8000);
+// ─── 23. MATRIX EASTER EGG ───
+let mxActive=false, mxInt=null;
+function activateMatrix(){
+  if(mxActive) return; mxActive=true;
+  const cv=document.getElementById('matrix-rain'), ctx=cv.getContext('2d');
+  cv.width=window.innerWidth; cv.height=window.innerHeight; cv.classList.remove('hidden');
+  const chars='アイウエオカキYESHDIPPOUDEL0123456789@#$%';
+  const cols=Math.floor(cv.width/16), drops=Array(cols).fill(0);
+  mxInt=setInterval(()=>{
+    ctx.fillStyle='rgba(0,0,0,0.05)'; ctx.fillRect(0,0,cv.width,cv.height);
+    ctx.fillStyle='#dc143c'; ctx.font='14px Share Tech Mono,monospace';
+    drops.forEach((y,i)=>{ctx.fillText(chars[Math.floor(Math.random()*chars.length)],i*16,y*16);drops[i]=(y*16>cv.height&&Math.random()>.975)?0:drops[i]+1;});
+  },33);
+  setTimeout(()=>{clearInterval(mxInt);cv.classList.add('hidden');mxActive=false;},8000);
 }
 
-// ─── 21. KONAMI CODE EASTER EGG ───
-const konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
-let kIdx = 0;
-document.addEventListener('keydown', e => {
-  if (e.key === konami[kIdx]) {
-    kIdx++;
-    if (kIdx === konami.length) {
-      kIdx = 0;
-      document.getElementById('easter-ov').classList.remove('hidden');
-      activateMatrix();
-    }
-  } else { kIdx = 0; }
+// ─── 24. KONAMI CODE ───
+const konami=['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+let ki=0;
+document.addEventListener('keydown',e=>{
+  if(e.key===konami[ki]){ki++;if(ki===konami.length){ki=0;document.getElementById('easter-ov').classList.remove('hidden');activateMatrix();showToast('Konami Code activated! 🎮','success');}}
+  else ki=0;
 });
-window.closeEaster = function() { document.getElementById('easter-ov').classList.add('hidden'); };
+window.closeEaster = () => document.getElementById('easter-ov').classList.add('hidden');
