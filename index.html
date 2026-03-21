@@ -5,10 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Yeshdip Poudel | Hacker · Developer · Innovator</title>
   <meta name="description" content="Yeshdip Poudel — Ethical Hacker, Python Developer, AI Enthusiast from Nepal."/>
+  <meta property="og:title" content="Yeshdip Poudel | Portfolio"/>
+  <meta property="og:description" content="Ethical Hacker, Python Dev & AI Builder from Nepal 🇳🇵"/>
   <link rel="stylesheet" href="style.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet"/>
 </head>
 <body>
+
+  <!-- Grain texture overlay -->
+  <div class="grain"></div>
+
+  <!-- Toast container -->
+  <div id="toast-container"></div>
+
+  <!-- Section dot nav -->
+  <div id="section-dots">
+    <div class="sdot active" data-sec="hero"     title="Home"></div>
+    <div class="sdot" data-sec="about"       title="About"></div>
+    <div class="sdot" data-sec="services"    title="Services"></div>
+    <div class="sdot" data-sec="skills"      title="Skills"></div>
+    <div class="sdot" data-sec="stack"       title="Stack"></div>
+    <div class="sdot" data-sec="projects"    title="Projects"></div>
+    <div class="sdot" data-sec="timeline"    title="Journey"></div>
+    <div class="sdot" data-sec="ctf"         title="CTF"></div>
+    <div class="sdot" data-sec="github"      title="GitHub"></div>
+    <div class="sdot" data-sec="blog"        title="Blog"></div>
+    <div class="sdot" data-sec="achievements" title="Awards"></div>
+    <div class="sdot" data-sec="testimonials" title="Reviews"></div>
+    <div class="sdot" data-sec="uses"        title="Setup"></div>
+    <div class="sdot" data-sec="contact"     title="Contact"></div>
+  </div>
+
+  <!-- Floating Hire Me CTA -->
+  <div id="hire-cta" class="hidden">
+    <a href="mailto:kripuyeshdip@gmail.com" class="hire-cta-btn">
+      <span class="hire-dot"></span>
+      <span>HIRE ME</span>
+    </a>
+  </div>
 
   <!-- Custom Cursor -->
   <div id="cursor"></div>
@@ -18,16 +52,19 @@
   <div id="loader">
     <canvas id="loader-matrix"></canvas>
     <div class="loader-inner">
-      <div class="loader-hex"><svg viewBox="0 0 100 100"><polygon points="50,2 93,26 93,74 50,98 7,74 7,26" fill="none" stroke="#dc143c" stroke-width="2"/></svg><span>YP</span></div>
+      <div class="loader-hex">
+        <svg viewBox="0 0 100 100"><polygon points="50,2 93,26 93,74 50,98 7,74 7,26" fill="none" stroke="#dc143c" stroke-width="2"/></svg>
+        <span>YP</span>
+      </div>
       <div class="loader-bar"><div class="loader-fill" id="loader-fill"></div></div>
       <div class="loader-text" id="loader-text">BOOTING SYSTEM...</div>
       <div class="loader-pct" id="loader-pct">0%</div>
     </div>
   </div>
 
-  <!-- Matrix Easter Egg Canvas -->
+  <!-- Matrix Easter Egg -->
   <canvas id="matrix-rain" class="hidden"></canvas>
-im
+
   <!-- Particle Canvas -->
   <canvas id="particles"></canvas>
   <div class="scanlines"></div>
@@ -40,18 +77,21 @@ im
     <div id="cmd-palette">
       <div class="cmd-header">
         <span class="cmd-icon">⌘</span>
-        <input id="cmd-input" type="text" placeholder="Navigate... type a section name" autocomplete="off"/>
+        <input id="cmd-input" type="text" placeholder="Navigate or search..." autocomplete="off"/>
         <span class="cmd-esc" onclick="closeCmd()">ESC</span>
       </div>
       <ul id="cmd-list"></ul>
-      <div class="cmd-footer"><kbd>↑</kbd><kbd>↓</kbd> move &nbsp;<kbd>↵</kbd> go &nbsp;<kbd>ESC</kbd> close &nbsp;<span class="cmd-easter-hint">↑↑↓↓←→←→BA = ?</span></div>
+      <div class="cmd-footer">
+        <kbd>↑</kbd><kbd>↓</kbd> move &nbsp;<kbd>↵</kbd> go &nbsp;<kbd>ESC</kbd> close
+        <span class="cmd-easter-hint">↑↑↓↓←→←→BA = secret 😏</span>
+      </div>
     </div>
   </div>
 
-  <!-- Music Player --> 
+  <!-- Music Player -->
   <div id="music-player">
     <div id="music-bars" class="hidden"><span></span><span></span><span></span><span></span><span></span></div>
-    <button id="music-btn" title="Toggle ambient hacker music" onclick="toggleMusic()">🎵</button>
+    <button id="music-btn" title="Toggle ambient music" onclick="toggleMusic()">🎵</button>
   </div>
 
   <!-- Back to Top -->
@@ -61,18 +101,22 @@ im
   <nav id="navbar">
     <div class="nav-left">
       <div class="nav-brand" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-        <div class="nav-hex-wrap"><svg viewBox="0 0 40 40"><polygon points="20,1 37,10 37,30 20,39 3,30 3,10" fill="none" stroke="#dc143c" stroke-width="1.5"/></svg><span>YP</span></div>
+        <div class="nav-hex-wrap">
+          <svg viewBox="0 0 40 40"><polygon points="20,1 37,10 37,30 20,39 3,30 3,10" fill="none" stroke="#dc143c" stroke-width="1.5"/></svg>
+          <span>YP</span>
+        </div>
       </div>
       <div id="live-time"></div>
     </div>
     <ul class="nav-links" id="nav-links">
       <li><a href="#hero">HOME</a></li>
       <li><a href="#about">ABOUT</a></li>
+      <li><a href="#services">SERVICES</a></li>
       <li><a href="#skills">SKILLS</a></li>
-      <li><a href="#stack">STACK</a></li>
       <li><a href="#projects">PROJECTS</a></li>
       <li><a href="#timeline">JOURNEY</a></li>
       <li><a href="#ctf">CTF</a></li>
+      <li><a href="#github">GITHUB</a></li>
       <li><a href="#blog">BLOG</a></li>
       <li><a href="#achievements">AWARDS</a></li>
       <li><a href="#contact">CONTACT</a></li>
@@ -87,25 +131,30 @@ im
   <!-- Mobile Menu -->
   <div id="mobile-menu" class="hidden">
     <div class="mob-brand">[ YESHDIP POUDEL ]</div>
-    <a href="#hero" onclick="closeMobile()">HOME</a>
-    <a href="#about" onclick="closeMobile()">ABOUT</a>
-    <a href="#skills" onclick="closeMobile()">SKILLS</a>
-    <a href="#stack" onclick="closeMobile()">TECH STACK</a>
-    <a href="#projects" onclick="closeMobile()">PROJECTS</a>
-    <a href="#timeline" onclick="closeMobile()">JOURNEY</a>
-    <a href="#ctf" onclick="closeMobile()">CTF &amp; SECURITY</a>
-    <a href="#blog" onclick="closeMobile()">BLOG</a>
-    <a href="#achievements" onclick="closeMobile()">ACHIEVEMENTS</a>
-    <a href="#uses" onclick="closeMobile()">MY SETUP</a>
-    <a href="#contact" onclick="closeMobile()">CONTACT</a>
+    <a href="#hero"          onclick="closeMobile()">HOME</a>
+    <a href="#about"         onclick="closeMobile()">ABOUT</a>
+    <a href="#services"      onclick="closeMobile()">SERVICES</a>
+    <a href="#skills"        onclick="closeMobile()">SKILLS</a>
+    <a href="#stack"         onclick="closeMobile()">TECH STACK</a>
+    <a href="#projects"      onclick="closeMobile()">PROJECTS</a>
+    <a href="#timeline"      onclick="closeMobile()">JOURNEY</a>
+    <a href="#ctf"           onclick="closeMobile()">CTF &amp; SECURITY</a>
+    <a href="#github"        onclick="closeMobile()">GITHUB STATS</a>
+    <a href="#blog"          onclick="closeMobile()">BLOG</a>
+    <a href="#achievements"  onclick="closeMobile()">ACHIEVEMENTS</a>
+    <a href="#testimonials"  onclick="closeMobile()">TESTIMONIALS</a>
+    <a href="#uses"          onclick="closeMobile()">MY SETUP</a>
+    <a href="#contact"       onclick="closeMobile()">CONTACT</a>
   </div>
 
-  <!-- ===== HERO ===== -->
+  <!-- ════════════════════════════════════
+       HERO
+  ════════════════════════════════════ -->
   <section id="hero">
     <div class="hero-bg-text" aria-hidden="true">YESHDIP</div>
     <div class="hero-content">
-      <div class="hero-badge fade-in"><span class="badge-pulse"></span>OPEN TO COLLABORATE</div>
-      <div class="hero-tag fade-in d1">// STUDENT · HACKER · BUILDER · NEPAL 🇳🇵</div>
+      <div class="hero-badge fade-in"><span class="badge-pulse"></span>OPEN TO COLLABORATE &amp; INTERNSHIPS</div>
+      <div class="hero-tag fade-in d1">// STUDENT · ETHICAL HACKER · AI BUILDER · NEPAL 🇳🇵</div>
       <h1 class="hero-name fade-in d2">
         <span class="glitch" data-text="YESHDIP">YESHDIP</span><br/>
         <span class="glitch red" data-text="POUDEL">POUDEL</span>
@@ -115,7 +164,7 @@ im
       <div class="hero-actions fade-in d5">
         <a href="#projects" class="btn-primary">VIEW WORK <span class="btn-arrow">→</span></a>
         <a href="mailto:kripuyeshdip@gmail.com" class="btn-hire">HIRE ME ✦</a>
-        <a href="#contact" class="btn-ghost">CONTACT</a>
+        <button class="btn-ghost" onclick="downloadCV()">DOWNLOAD CV ↓</button>
       </div>
       <div class="hero-stats fade-in d5">
         <div class="hstat"><span class="hstat-n" data-t="5">0</span><span class="hstat-u">+</span><span class="hstat-l">PROJECTS</span></div>
@@ -129,9 +178,12 @@ im
     </div>
     <div class="hero-visual fade-in d3">
       <div class="avatar-wrap">
-        <div class="av-rings"><div class="avr r1"></div><div class="avr r2"></div><div class="avr r3"></div><div class="avr r4"></div></div>
+        <div class="av-rings">
+          <div class="avr r1"></div><div class="avr r2"></div>
+          <div class="avr r3"></div><div class="avr r4"></div>
+        </div>
         <div class="av-scanner"></div>
-        <img src="ChatGPT Image Mar 20, 2026, 08_21_38 PM.png" alt="Yeshdip Poudel" class="av-img"/>
+        <img src="https://github.com/yeshdip/portfolio/blob/main/ChatGPT%20Image%20Mar%2020,%202026,%2008_21_38%20PM.png?raw=true" alt="Yeshdip Poudel" class="av-img"/>
         <div class="av-label">YESHDIP_POUDEL.exe</div>
       </div>
       <div class="hero-infocards">
@@ -146,7 +198,7 @@ im
           <div>&nbsp;&nbsp;<span class="cp">name</span>: <span class="cs">"Yeshdip"</span>,</div>
           <div>&nbsp;&nbsp;<span class="cp">from</span>: <span class="cs">"Nepal 🇳🇵"</span>,</div>
           <div>&nbsp;&nbsp;<span class="cp">status</span>: <span class="cs">"building 🔥"</span>,</div>
-          <div>&nbsp;&nbsp;<span class="cp">mode</span>: <span class="cs">"hacker"</span></div>
+          <div>&nbsp;&nbsp;<span class="cp">coffee</span>: <span class="cs">Infinity</span></div>
           <div>};</div>
         </div>
       </div>
@@ -154,13 +206,33 @@ im
     <div class="scroll-hint"><div class="mouse-ico"><div class="mouse-whl"></div></div><span>SCROLL</span></div>
   </section>
 
-  <!-- ===== ABOUT ===== -->
+  <!-- Currently Building Ticker -->
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <span>🔥 CURRENTLY BUILDING: Smart Learn v2.0</span>
+      <span>⚡ LEARNING: Advanced Penetration Testing</span>
+      <span>🤖 EXPLORING: LLM Fine-tuning</span>
+      <span>🎮 SIDE PROJECT: Multiplayer Game Engine</span>
+      <span>🏴 ACTIVE ON: TryHackMe Daily Challenges</span>
+      <span>📚 READING: Hacking — The Art of Exploitation</span>
+      <span>🔥 CURRENTLY BUILDING: Smart Learn v2.0</span>
+      <span>⚡ LEARNING: Advanced Penetration Testing</span>
+      <span>🤖 EXPLORING: LLM Fine-tuning</span>
+      <span>🎮 SIDE PROJECT: Multiplayer Game Engine</span>
+      <span>🏴 ACTIVE ON: TryHackMe Daily Challenges</span>
+      <span>📚 READING: Hacking — The Art of Exploitation</span>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════
+       ABOUT
+  ════════════════════════════════════ -->
   <section id="about" class="section">
     <div class="sec-hdr reveal"><span class="sec-n">01</span><h2 class="sec-t">ABOUT ME</h2><div class="sec-l"></div></div>
     <div class="about-grid">
       <div class="about-text reveal">
         <p>I am <strong>Yeshdip Poudel</strong>, a passionate and relentless builder from <strong>Nepal 🇳🇵</strong>.</p>
-        <p>My journey started with Python scripts and curiosity about how things break — which led me deep into <em>ethical hacking</em>, <em>pentesting</em>, and <em>bug bounty</em> hunting. I don't just consume technology; I dissect it, rebuild it, and make it better.</p>
+        <p>My journey started with Python scripts and a burning curiosity about how things break — which led me deep into <em>ethical hacking</em>, <em>pentesting</em>, and <em>bug bounty</em> hunting.</p>
         <p>Beyond security, I'm obsessed with <em>Artificial Intelligence</em> and how it can transform education, space exploration, and everyday life. Projects like <em>Smart Learn</em> and <em>GodGPT</em> are testaments to this obsession.</p>
         <p>I believe in <strong>learning by building</strong> — every project is a playground, every bug is a lesson, every deployment is a victory.</p>
         <div class="about-quote"><span>"</span>The best way to predict the future is to hack it.<span>"</span></div>
@@ -170,18 +242,18 @@ im
         </div>
       </div>
       <div class="about-right">
-        <div class="terminal reveal d1">
-          <div class="t-bar"><span class="td r"></span><span class="td y"></span><span class="td g"></span><span class="t-title">yeshdip@nepal:~</span></div>
-          <div class="t-body">
-            <div><span class="tp">$</span> whoami</div>
-            <div class="to">Yeshdip Poudel — Developer &amp; Ethical Hacker</div>
-            <div><span class="tp">$</span> cat skills.txt</div>
-            <div class="to">Python | HTML/CSS | Hacking | AI | Games</div>
-            <div><span class="tp">$</span> echo $GOAL</div>
-            <div class="to">Innovate. Inspire. Impact. 🚀</div>
-            <div><span class="tp">$</span> uptime</div>
-            <div class="to" id="uptime-line">calculating...</div>
-            <div><span class="tp">$</span> <span class="blink-cur">█</span></div>
+        <!-- Interactive Terminal -->
+        <div class="terminal reveal d1" id="interactive-terminal">
+          <div class="t-bar">
+            <span class="td r"></span><span class="td y"></span><span class="td g"></span>
+            <span class="t-title">yeshdip@nepal:~ [interactive]</span>
+          </div>
+          <div class="t-body" id="term-output">
+            <div><span class="tp">$</span> <span class="to">type 'help' for available commands</span></div>
+          </div>
+          <div class="term-input-row">
+            <span class="tp">$</span>
+            <input type="text" id="term-input" placeholder="type a command..." autocomplete="off" spellcheck="false"/>
           </div>
         </div>
         <div class="about-nums reveal d2">
@@ -194,84 +266,132 @@ im
     </div>
   </section>
 
-  <!-- ===== SKILLS ===== -->
+  <!-- ════════════════════════════════════
+       SERVICES  (NEW)
+  ════════════════════════════════════ -->
+  <section id="services" class="section">
+    <div class="sec-hdr reveal"><span class="sec-n">02</span><h2 class="sec-t">WHAT I OFFER</h2><div class="sec-l"></div></div>
+    <p class="sec-sub reveal">Services I provide as a freelancer and collaborator.</p>
+    <div class="svc-grid">
+      <div class="svc-card reveal">
+        <div class="svc-icon">🌐</div>
+        <h3>Web Development</h3>
+        <p>Modern, responsive websites and web apps built with clean HTML, CSS, and JavaScript. Fast, accessible, and visually stunning.</p>
+        <div class="svc-tags"><span>HTML5</span><span>CSS3</span><span>JS</span></div>
+      </div>
+      <div class="svc-card reveal d1">
+        <div class="svc-icon">🛡️</div>
+        <h3>Security Auditing</h3>
+        <p>Web app penetration testing, vulnerability assessment, and security reports. Find the holes before the bad guys do.</p>
+        <div class="svc-tags"><span>Pentest</span><span>XSS</span><span>SQLi</span></div>
+      </div>
+      <div class="svc-card reveal d2">
+        <div class="svc-icon">🤖</div>
+        <h3>AI Integration</h3>
+        <p>Integrate LLM APIs, build custom AI tools, and automate workflows. From chatbots to intelligent data pipelines.</p>
+        <div class="svc-tags"><span>Python</span><span>LLMs</span><span>APIs</span></div>
+      </div>
+      <div class="svc-card reveal d3">
+        <div class="svc-icon">🐍</div>
+        <h3>Python Scripting</h3>
+        <p>Automation scripts, data processing tools, web scrapers, bots, and CLI utilities. If it's repetitive, let's automate it.</p>
+        <div class="svc-tags"><span>Python</span><span>Automation</span><span>CLI</span></div>
+      </div>
+      <div class="svc-card reveal">
+        <div class="svc-icon">🎮</div>
+        <h3>Game Development</h3>
+        <p>2D games and interactive experiences using Pygame and JavaScript. Custom mechanics, animations, and game logic.</p>
+        <div class="svc-tags"><span>Pygame</span><span>JS</span><span>Canvas</span></div>
+      </div>
+      <div class="svc-card reveal d1">
+        <div class="svc-icon">🎨</div>
+        <h3>UI/UX Design</h3>
+        <p>Clean, modern interface design using Figma. Wireframes, prototypes, and design systems that actually look good.</p>
+        <div class="svc-tags"><span>Figma</span><span>Design</span><span>UX</span></div>
+      </div>
+    </div>
+    <div class="svc-cta reveal">
+      <p>Interested in working together?</p>
+      <a href="mailto:kripuyeshdip@gmail.com" class="btn-primary">LET'S TALK →</a>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════
+       SKILLS
+  ════════════════════════════════════ -->
   <section id="skills" class="section">
-    <div class="sec-hdr reveal"><span class="sec-n">02</span><h2 class="sec-t">SKILLS</h2><div class="sec-l"></div></div>
+    <div class="sec-hdr reveal"><span class="sec-n">03</span><h2 class="sec-t">SKILLS</h2><div class="sec-l"></div></div>
     <div class="skills-layout">
       <div class="skills-bars reveal">
-        <div class="skbar" data-w="90"><div class="skb-head"><span>🌐 HTML &amp; CSS</span><span class="skb-pct">90%</span></div><div class="skb-track"><div class="skb-fill" data-width="90"></div></div></div>
-        <div class="skbar" data-w="82"><div class="skb-head"><span>🐍 Python</span><span class="skb-pct">82%</span></div><div class="skb-track"><div class="skb-fill" data-width="82"></div></div></div>
-        <div class="skbar" data-w="85"><div class="skb-head"><span>🛡️ Ethical Hacking</span><span class="skb-pct">85%</span></div><div class="skb-track"><div class="skb-fill" data-width="85"></div></div></div>
-        <div class="skbar" data-w="78"><div class="skb-head"><span>🔍 Pentesting</span><span class="skb-pct">78%</span></div><div class="skb-track"><div class="skb-fill" data-width="78"></div></div></div>
-        <div class="skbar" data-w="72"><div class="skb-head"><span>🐛 Bug Hunting</span><span class="skb-pct">72%</span></div><div class="skb-track"><div class="skb-fill" data-width="72"></div></div></div>
-        <div class="skbar" data-w="75"><div class="skb-head"><span>🤖 AI / ML</span><span class="skb-pct">75%</span></div><div class="skb-track"><div class="skb-fill" data-width="75"></div></div></div>
-        <div class="skbar" data-w="70"><div class="skb-head"><span>🎮 Game Dev</span><span class="skb-pct">70%</span></div><div class="skb-track"><div class="skb-fill" data-width="70"></div></div></div>
-        <div class="skbar" data-w="68"><div class="skb-head"><span>🎨 UI/UX Design</span><span class="skb-pct">68%</span></div><div class="skb-track"><div class="skb-fill" data-width="68"></div></div></div>
+        <div class="skbar"><div class="skb-head"><span>🌐 HTML &amp; CSS</span><span class="skb-pct">90%</span></div><div class="skb-track"><div class="skb-fill" data-width="90"></div></div></div>
+        <div class="skbar"><div class="skb-head"><span>🐍 Python</span><span class="skb-pct">82%</span></div><div class="skb-track"><div class="skb-fill" data-width="82"></div></div></div>
+        <div class="skbar"><div class="skb-head"><span>🛡️ Ethical Hacking</span><span class="skb-pct">85%</span></div><div class="skb-track"><div class="skb-fill" data-width="85"></div></div></div>
+        <div class="skbar"><div class="skb-head"><span>🔍 Pentesting</span><span class="skb-pct">78%</span></div><div class="skb-track"><div class="skb-fill" data-width="78"></div></div></div>
+        <div class="skbar"><div class="skb-head"><span>🐛 Bug Hunting</span><span class="skb-pct">72%</span></div><div class="skb-track"><div class="skb-fill" data-width="72"></div></div></div>
+        <div class="skbar"><div class="skb-head"><span>🤖 AI / ML</span><span class="skb-pct">75%</span></div><div class="skb-track"><div class="skb-fill" data-width="75"></div></div></div>
+        <div class="skbar"><div class="skb-head"><span>🎮 Game Dev</span><span class="skb-pct">70%</span></div><div class="skb-track"><div class="skb-fill" data-width="70"></div></div></div>
+        <div class="skbar"><div class="skb-head"><span>🎨 UI/UX Design</span><span class="skb-pct">68%</span></div><div class="skb-track"><div class="skb-fill" data-width="68"></div></div></div>
       </div>
       <div class="skills-hex-grid reveal d1">
-        <div class="hex-item" style="--d:0s"><div class="hi-inner"><span class="hi-ico">🛡️</span><span>Hacking</span></div></div>
-        <div class="hex-item" style="--d:0.1s"><div class="hi-inner"><span class="hi-ico">🐍</span><span>Python</span></div></div>
-        <div class="hex-item" style="--d:0.2s"><div class="hi-inner"><span class="hi-ico">🌐</span><span>Web Dev</span></div></div>
-        <div class="hex-item" style="--d:0.3s"><div class="hi-inner"><span class="hi-ico">🤖</span><span>AI/ML</span></div></div>
-        <div class="hex-item" style="--d:0.4s"><div class="hi-inner"><span class="hi-ico">🔍</span><span>Pentest</span></div></div>
-        <div class="hex-item" style="--d:0.5s"><div class="hi-inner"><span class="hi-ico">🎮</span><span>Games</span></div></div>
-        <div class="hex-item" style="--d:0.6s"><div class="hi-inner"><span class="hi-ico">🐛</span><span>Bugs</span></div></div>
-        <div class="hex-item" style="--d:0.7s"><div class="hi-inner"><span class="hi-ico">🎨</span><span>Design</span></div></div>
-        <div class="hex-item" style="--d:0.8s"><div class="hi-inner"><span class="hi-ico">📟</span><span>Linux</span></div></div>
+        <div class="hex-item" style="--d:0s"><div class="hi-ico">🛡️</div><span>Hacking</span></div>
+        <div class="hex-item" style="--d:.08s"><div class="hi-ico">🐍</div><span>Python</span></div>
+        <div class="hex-item" style="--d:.16s"><div class="hi-ico">🌐</div><span>Web Dev</span></div>
+        <div class="hex-item" style="--d:.24s"><div class="hi-ico">🤖</div><span>AI/ML</span></div>
+        <div class="hex-item" style="--d:.32s"><div class="hi-ico">🔍</div><span>Pentest</span></div>
+        <div class="hex-item" style="--d:.40s"><div class="hi-ico">🎮</div><span>Games</span></div>
+        <div class="hex-item" style="--d:.48s"><div class="hi-ico">🐛</div><span>Bugs</span></div>
+        <div class="hex-item" style="--d:.56s"><div class="hi-ico">🎨</div><span>Design</span></div>
+        <div class="hex-item" style="--d:.64s"><div class="hi-ico">📟</div><span>Linux</span></div>
       </div>
     </div>
   </section>
 
-  <!-- ===== TECH STACK ===== -->
+  <!-- ════════════════════════════════════
+       TECH STACK
+  ════════════════════════════════════ -->
   <section id="stack" class="section">
-    <div class="sec-hdr reveal"><span class="sec-n">03</span><h2 class="sec-t">TECH STACK</h2><div class="sec-l"></div></div>
+    <div class="sec-hdr reveal"><span class="sec-n">04</span><h2 class="sec-t">TECH STACK</h2><div class="sec-l"></div></div>
     <div class="stack-grid">
       <div class="stk-col reveal">
         <div class="stk-title">// LANGUAGES</div>
-        <div class="stk-items">
-          <div class="stk-item"><span>🐍</span>Python</div>
-          <div class="stk-item"><span>🌐</span>HTML5</div>
-          <div class="stk-item"><span>🎨</span>CSS3</div>
-          <div class="stk-item"><span>⚡</span>JavaScript</div>
-          <div class="stk-item"><span>📟</span>Bash</div>
-        </div>
+        <div class="stk-item"><span>🐍</span>Python</div>
+        <div class="stk-item"><span>🌐</span>HTML5</div>
+        <div class="stk-item"><span>🎨</span>CSS3</div>
+        <div class="stk-item"><span>⚡</span>JavaScript</div>
+        <div class="stk-item"><span>📟</span>Bash</div>
       </div>
       <div class="stk-col reveal d1">
         <div class="stk-title">// TOOLS</div>
-        <div class="stk-items">
-          <div class="stk-item"><span>🐙</span>GitHub</div>
-          <div class="stk-item"><span>🐧</span>Linux</div>
-          <div class="stk-item"><span>🔧</span>VS Code</div>
-          <div class="stk-item"><span>🎭</span>Figma</div>
-          <div class="stk-item"><span>🐋</span>Docker</div>
-        </div>
+        <div class="stk-item"><span>🐙</span>GitHub</div>
+        <div class="stk-item"><span>🐧</span>Linux</div>
+        <div class="stk-item"><span>🔧</span>VS Code</div>
+        <div class="stk-item"><span>🎭</span>Figma</div>
+        <div class="stk-item"><span>🐋</span>Docker</div>
       </div>
       <div class="stk-col reveal d2">
         <div class="stk-title">// SECURITY</div>
-        <div class="stk-items">
-          <div class="stk-item"><span>🐉</span>Kali Linux</div>
-          <div class="stk-item"><span>🦈</span>Wireshark</div>
-          <div class="stk-item"><span>🗺️</span>Nmap</div>
-          <div class="stk-item"><span>💉</span>SQLMap</div>
-          <div class="stk-item"><span>📡</span>Burp Suite</div>
-        </div>
+        <div class="stk-item"><span>🐉</span>Kali Linux</div>
+        <div class="stk-item"><span>🦈</span>Wireshark</div>
+        <div class="stk-item"><span>🗺️</span>Nmap</div>
+        <div class="stk-item"><span>💉</span>SQLMap</div>
+        <div class="stk-item"><span>📡</span>Burp Suite</div>
       </div>
       <div class="stk-col reveal d3">
         <div class="stk-title">// AI &amp; DATA</div>
-        <div class="stk-items">
-          <div class="stk-item"><span>🤖</span>OpenAI API</div>
-          <div class="stk-item"><span>🔬</span>NumPy</div>
-          <div class="stk-item"><span>🐼</span>Pandas</div>
-          <div class="stk-item"><span>📊</span>Matplotlib</div>
-          <div class="stk-item"><span>🧠</span>TensorFlow</div>
-        </div>
+        <div class="stk-item"><span>🤖</span>OpenAI API</div>
+        <div class="stk-item"><span>🔬</span>NumPy</div>
+        <div class="stk-item"><span>🐼</span>Pandas</div>
+        <div class="stk-item"><span>📊</span>Matplotlib</div>
+        <div class="stk-item"><span>🧠</span>TensorFlow</div>
       </div>
     </div>
   </section>
 
-  <!-- ===== PROJECTS ===== -->
+  <!-- ════════════════════════════════════
+       PROJECTS
+  ════════════════════════════════════ -->
   <section id="projects" class="section">
-    <div class="sec-hdr reveal"><span class="sec-n">04</span><h2 class="sec-t">PROJECTS</h2><div class="sec-l"></div></div>
+    <div class="sec-hdr reveal"><span class="sec-n">05</span><h2 class="sec-t">PROJECTS</h2><div class="sec-l"></div></div>
     <div class="filter-bar reveal">
       <button class="fb active" data-f="all">ALL <span>5</span></button>
       <button class="fb" data-f="ai">AI <span>3</span></button>
@@ -338,9 +458,11 @@ im
     <div class="projects-cta reveal"><a href="https://github.com/yeshdip" target="_blank" class="btn-ghost">VIEW ALL ON GITHUB →</a></div>
   </section>
 
-  <!-- ===== TIMELINE ===== -->
+  <!-- ════════════════════════════════════
+       TIMELINE
+  ════════════════════════════════════ -->
   <section id="timeline" class="section">
-    <div class="sec-hdr reveal"><span class="sec-n">05</span><h2 class="sec-t">MY JOURNEY</h2><div class="sec-l"></div></div>
+    <div class="sec-hdr reveal"><span class="sec-n">06</span><h2 class="sec-t">MY JOURNEY</h2><div class="sec-l"></div></div>
     <div class="tl-wrap">
       <div class="tl-line"></div>
       <div class="tl-item tl-l reveal">
@@ -367,7 +489,7 @@ im
           <div class="tl-yr">2024</div>
           <h3>Breaking Through ⚡</h3>
           <p>Won National School Coding Challenge. Placed 2nd in Ethical Hacking Inter-School Contest. Built Smart Learn, GodGPT, AstroAI. Deep-dived into AI/ML and bug bounty.</p>
-          <div class="tl-tags"><span>🏆 National Winner</span><span>AI/ML</span><span>Bug Bounty</span><span>2nd Hacking</span></div>
+          <div class="tl-tags"><span>🏆 National Winner</span><span>AI/ML</span><span>Bug Bounty</span></div>
         </div>
       </div>
       <div class="tl-item tl-r reveal d1">
@@ -375,19 +497,21 @@ im
         <div class="tl-card">
           <div class="tl-yr">2025 →</div>
           <h3>The Next Chapter 🚀</h3>
-          <p>Nepal's First School-Level AI Hackathon — Best Collaboration award. DIGI Club Phase 2. Building bigger, breaking smarter. Mission continues...</p>
-          <div class="tl-tags"><span>🤖 AI Hackathon</span><span>🔥 In Progress</span><span>Growing</span></div>
+          <p>Nepal's First School AI Hackathon — Best Collaboration. DIGI Club Phase 2. Building bigger, breaking smarter. Mission continues...</p>
+          <div class="tl-tags"><span>🤖 AI Hackathon</span><span>🔥 In Progress</span></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== CTF & SECURITY ===== -->
+  <!-- ════════════════════════════════════
+       CTF & SECURITY
+  ════════════════════════════════════ -->
   <section id="ctf" class="section">
-    <div class="sec-hdr reveal"><span class="sec-n">06</span><h2 class="sec-t">CTF &amp; SECURITY</h2><div class="sec-l"></div></div>
+    <div class="sec-hdr reveal"><span class="sec-n">07</span><h2 class="sec-t">CTF &amp; SECURITY</h2><div class="sec-l"></div></div>
     <div class="ctf-layout">
       <div class="ctf-intro reveal">
-        <p>I regularly participate in <strong>Capture The Flag</strong> competitions and <strong>bug bounty</strong> programs, honing real-world offensive security skills across multiple domains.</p>
+        <p>I regularly participate in <strong>Capture The Flag</strong> competitions and <strong>bug bounty</strong> programs, honing real-world offensive security skills.</p>
         <div class="ctf-stats">
           <div class="cs"><span class="cs-n">12+</span><span>CTFs</span></div>
           <div class="cs"><span class="cs-n">50+</span><span>Bugs Found</span></div>
@@ -410,9 +534,35 @@ im
     </div>
   </section>
 
-  <!-- ===== BLOG ===== -->
+  <!-- ════════════════════════════════════
+       GITHUB STATS  (NEW)
+  ════════════════════════════════════ -->
+  <section id="github" class="section">
+    <div class="sec-hdr reveal"><span class="sec-n">08</span><h2 class="sec-t">GITHUB STATS</h2><div class="sec-l"></div></div>
+    <div class="gh-layout">
+      <div class="gh-cards reveal">
+        <img src="https://github-readme-stats.vercel.app/api?username=yeshdip&show_icons=true&theme=transparent&title_color=dc143c&icon_color=dc143c&text_color=d8d8d8&border_color=2a0a14&bg_color=0a0a0a&hide_border=false&count_private=true&rank_icon=github" alt="GitHub Stats" class="gh-img" loading="lazy" onerror="this.style.display='none'"/>
+        <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=yeshdip&layout=compact&theme=transparent&title_color=dc143c&text_color=d8d8d8&border_color=2a0a14&bg_color=0a0a0a&hide_border=false&langs_count=6" alt="Top Languages" class="gh-img" loading="lazy" onerror="this.style.display='none'"/>
+      </div>
+      <div class="gh-streak reveal d1">
+        <img src="https://github-readme-streak-stats.herokuapp.com/?user=yeshdip&theme=dark&background=0a0a0a&ring=dc143c&fire=ff2250&currStreakLabel=dc143c&sideLabels=777&currStreakNum=ffffff&sideNums=d8d8d8&dates=555&border=2a0a14" alt="GitHub Streak" class="gh-img-full" loading="lazy" onerror="this.style.display='none'"/>
+        <div class="gh-manual-stats">
+          <div class="gh-stat-box"><div class="gsb-num">yeshdip</div><div class="gsb-lbl">GitHub Username</div></div>
+          <div class="gh-stat-box"><div class="gsb-num">5+</div><div class="gsb-lbl">Repositories</div></div>
+          <div class="gh-stat-box"><div class="gsb-num">🔥</div><div class="gsb-lbl">Active Builder</div></div>
+          <div class="gh-stat-box">
+            <a href="https://github.com/yeshdip" target="_blank" class="btn-primary" style="font-size:.65rem;padding:.5rem 1rem">VIEW PROFILE →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════
+       BLOG
+  ════════════════════════════════════ -->
   <section id="blog" class="section">
-    <div class="sec-hdr reveal"><span class="sec-n">07</span><h2 class="sec-t">BLOG &amp; WRITEUPS</h2><div class="sec-l"></div></div>
+    <div class="sec-hdr reveal"><span class="sec-n">09</span><h2 class="sec-t">BLOG &amp; WRITEUPS</h2><div class="sec-l"></div></div>
     <div class="blog-grid">
       <div class="blog-card blog-feat reveal">
         <div class="bc-tag">✍️ FEATURED</div><div class="bc-date">MAR 2025</div>
@@ -428,7 +578,7 @@ im
       </div>
       <div class="blog-card reveal d2">
         <div class="bc-tag">🎮 GAMEDEV</div><div class="bc-date">NOV 2024</div>
-        <h3>Building a Zombie Runner in Pygame: Everything I Wish I Knew</h3>
+        <h3>Building a Zombie Runner in Pygame: Lessons Learned</h3>
         <p>Game development taught me more about programming logic than any tutorial ever could.</p>
         <div class="bc-foot"><span>5 min read</span><div class="bc-cats"><span>Pygame</span><span>Game</span></div><span class="bc-soon">COMING SOON</span></div>
       </div>
@@ -450,9 +600,11 @@ im
     </div>
   </section>
 
-  <!-- ===== ACHIEVEMENTS ===== -->
+  <!-- ════════════════════════════════════
+       ACHIEVEMENTS
+  ════════════════════════════════════ -->
   <section id="achievements" class="section">
-    <div class="sec-hdr reveal"><span class="sec-n">08</span><h2 class="sec-t">ACHIEVEMENTS</h2><div class="sec-l"></div></div>
+    <div class="sec-hdr reveal"><span class="sec-n">10</span><h2 class="sec-t">ACHIEVEMENTS</h2><div class="sec-l"></div></div>
     <div class="ach-grid">
       <div class="ach-card gold reveal"><span class="ar">🥇</span><div><strong>Winner — National School Coding Challenge</strong><span>2024</span></div></div>
       <div class="ach-card red reveal d1"><span class="ar">🤖</span><div><strong>Best Collaboration — Nepal's 1st School AI Hackathon</strong><span>Jan 2025</span></div></div>
@@ -467,9 +619,44 @@ im
     </div>
   </section>
 
-  <!-- ===== USES / SETUP ===== -->
+  <!-- ════════════════════════════════════
+       TESTIMONIALS  (NEW)
+  ════════════════════════════════════ -->
+  <section id="testimonials" class="section">
+    <div class="sec-hdr reveal"><span class="sec-n">11</span><h2 class="sec-t">WHAT PEOPLE SAY</h2><div class="sec-l"></div></div>
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p>"Yeshdip's attention to detail and problem-solving skills are remarkable for his age. He built our school's hackathon platform in record time and it worked flawlessly."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">👨‍🏫</div>
+          <div><strong>Mr. Sharma</strong><span>Teacher, DIGI Club Mentor</span></div>
+        </div>
+      </div>
+      <div class="testi-card reveal d1">
+        <div class="testi-stars">★★★★★</div>
+        <p>"Working with Yeshdip on the AI Hackathon was incredible. He brought both technical depth and creative energy — the kind of collaborator you want on your team."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">👩‍💻</div>
+          <div><strong>Priya R.</strong><span>AI Hackathon Team Member</span></div>
+        </div>
+      </div>
+      <div class="testi-card reveal d2">
+        <div class="testi-stars">★★★★★</div>
+        <p>"The security audit Yeshdip performed on our school project was thorough and professional. He found vulnerabilities others missed and explained them clearly."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">🧑‍💻</div>
+          <div><strong>Rohan K.</strong><span>Fellow Student Developer</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════
+       MY SETUP
+  ════════════════════════════════════ -->
   <section id="uses" class="section">
-    <div class="sec-hdr reveal"><span class="sec-n">09</span><h2 class="sec-t">MY SETUP</h2><div class="sec-l"></div></div>
+    <div class="sec-hdr reveal"><span class="sec-n">12</span><h2 class="sec-t">MY SETUP</h2><div class="sec-l"></div></div>
     <div class="uses-grid">
       <div class="uses-col reveal">
         <div class="uc-title">// HARDWARE</div>
@@ -495,15 +682,21 @@ im
     </div>
   </section>
 
-  <!-- ===== CONTACT ===== -->
+  <!-- ════════════════════════════════════
+       CONTACT
+  ════════════════════════════════════ -->
   <section id="contact" class="section">
-    <div class="sec-hdr reveal"><span class="sec-n">10</span><h2 class="sec-t">CONTACT</h2><div class="sec-l"></div></div>
+    <div class="sec-hdr reveal"><span class="sec-n">13</span><h2 class="sec-t">CONTACT</h2><div class="sec-l"></div></div>
     <div class="contact-layout">
       <div class="contact-left reveal">
         <h3 class="contact-h">LET'S BUILD SOMETHING<br/><span class="red">EXTRAORDINARY.</span></h3>
         <p class="contact-sub">Whether you have a project, collaboration, or just want to talk tech — I'm always open.</p>
         <div class="clinks">
-          <a href="mailto:kripuyeshdip@gmail.com" class="clink"><span>✉️</span><div><strong>EMAIL</strong><small>kripuyeshdip@gmail.com</small></div><span class="ca">→</span></a>
+          <div class="clink" onclick="copyEmail()">
+            <span>✉️</span>
+            <div><strong>EMAIL</strong><small>kripuyeshdip@gmail.com</small></div>
+            <span class="ca copy-hint" id="copy-hint">COPY</span>
+          </div>
           <a href="https://github.com/yeshdip" target="_blank" class="clink"><span>💻</span><div><strong>GITHUB</strong><small>github.com/yeshdip</small></div><span class="ca">→</span></a>
           <a href="https://www.instagram.com/yeshdippoudel/" target="_blank" class="clink"><span>📷</span><div><strong>INSTAGRAM</strong><small>@yeshdippoudel</small></div><span class="ca">→</span></a>
           <a href="https://www.facebook.com/yeshdip.poudel.2025/" target="_blank" class="clink"><span>📘</span><div><strong>FACEBOOK</strong><small>Yeshdip Poudel</small></div><span class="ca">→</span></a>
@@ -525,7 +718,7 @@ im
           <div class="cb-quick">
             <button onclick="quickAsk('What projects has Yeshdip built?')">Projects?</button>
             <button onclick="quickAsk('What are his main skills?')">Skills?</button>
-            <button onclick="quickAsk('How can I hire or collaborate with Yeshdip?')">Hire?</button>
+            <button onclick="quickAsk('How can I hire Yeshdip?')">Hire?</button>
           </div>
         </div>
         <div class="cb-inp">
@@ -541,14 +734,23 @@ im
     <div class="ft-top">
       <div class="ft-brand">
         <div class="ft-hex-wrap"><svg viewBox="0 0 50 50"><polygon points="25,2 46,13 46,37 25,48 4,37 4,13" fill="none" stroke="#dc143c" stroke-width="1.5"/></svg><span>YP</span></div>
-        <p>Building the future from Nepal,<br/>one commit at a time.</p>
+        <p>Building the future from Nepal,<br/>one commit at a time. 🇳🇵</p>
       </div>
-      <div class="ft-col"><div class="ft-ct">SECTIONS</div><a href="#hero">Home</a><a href="#about">About</a><a href="#skills">Skills</a><a href="#projects">Projects</a><a href="#timeline">Journey</a><a href="#blog">Blog</a></div>
-      <div class="ft-col"><div class="ft-ct">CONNECT</div><a href="https://github.com/yeshdip" target="_blank">GitHub</a><a href="https://www.instagram.com/yeshdippoudel/" target="_blank">Instagram</a><a href="mailto:kripuyeshdip@gmail.com">Email</a></div>
+      <div class="ft-col">
+        <div class="ft-ct">SECTIONS</div>
+        <a href="#hero">Home</a><a href="#about">About</a><a href="#services">Services</a>
+        <a href="#skills">Skills</a><a href="#projects">Projects</a><a href="#blog">Blog</a>
+      </div>
+      <div class="ft-col">
+        <div class="ft-ct">CONNECT</div>
+        <a href="https://github.com/yeshdip" target="_blank">GitHub</a>
+        <a href="https://www.instagram.com/yeshdippoudel/" target="_blank">Instagram</a>
+        <a href="mailto:kripuyeshdip@gmail.com">Email</a>
+      </div>
     </div>
     <div class="ft-bot">
       <span>© 2025 Yeshdip Poudel. Made with ❤️ &amp; ☕ in Nepal 🇳🇵</span>
-      <span>Press <kbd>CTRL+K</kbd> to navigate fast</span>
+      <span>Press <kbd>CTRL+K</kbd> to navigate</span>
       <span class="ft-secret">Try <kbd>↑↑↓↓←→←→BA</kbd> 😏</span>
     </div>
   </footer>
